@@ -18,8 +18,8 @@
   },
   "devDependencies": {
     "@sieutoc/tsconfig": "workspace:*",
-    "@types/react": "18.2.0",
-    "@types/react-dom": "18.2.0",
+    "@types/react": "18.2.31",
+    "@types/react-dom": "18.2.14",
     "eslint": "7.32.0",
     "eslint-config-sieutoc": "workspace:*",
     "react": "18.2.0",
