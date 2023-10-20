@@ -4,7 +4,7 @@
     "build": "turbo build",
     "dev": "turbo dev --no-cache --continue",
     "lint": "turbo lint",
-    "clean": "turbo clean && rm -rf node_modules",
+    "clean": "turbo clean && rm -rf node_modules && pnpm i",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
     "version-packages": "changeset version",
@@ -13,7 +13,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.22.0",
     "eslint": "^7.32.0",
-    "eslint-config-acme": "workspace:*",
+    "eslint-config-sieutoc": "workspace:*",
     "prettier": "^2.5.1",
     "turbo": "latest"
   },
