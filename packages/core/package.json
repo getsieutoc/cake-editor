@@ -1,5 +1,5 @@
 {
-  "name": "@acme/utils",
+  "name": "@sieutoc/cake-editor",
   "version": "0.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -22,7 +22,7 @@
     "@types/react-dom": "^18.2.0",
     "eslint": "^7.32.0",
     "eslint-config-sieutoc": "workspace:*",
-    "react": "^18.2.0",
+    "react": "^17.0.2",
     "tsup": "^5.10.1",
     "typescript": "^4.5.3"
   },

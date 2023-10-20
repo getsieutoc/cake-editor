@@ -24,14 +24,11 @@ importers:
         specifier: latest
         version: 1.10.16
 
-  apps/docs:
+  apps/web:
     dependencies:
-      '@acme/core':
+      '@sieutoc/cake-editor':
         specifier: workspace:*
-        version: link:../../packages/acme-core
-      '@acme/utils':
-        specifier: workspace:*
-        version: link:../../packages/acme-utils
+        version: link:../../packages/core
       next:
         specifier: ^13.4.1
         version: 13.5.6(react-dom@18.2.0)(react@18.2.0)
@@ -41,6 +38,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      utils:
+        specifier: workspace:*
+        version: link:../../packages/utils
     devDependencies:
       '@sieutoc/tsconfig':
         specifier: workspace:*
@@ -50,7 +50,7 @@ importers:
         version: 17.0.45
       '@types/react':
         specifier: ^18.0.22
-        version: 18.2.30
+        version: 18.2.31
       '@types/react-dom':
         specifier: ^18.0.7
         version: 18.2.14
@@ -61,14 +61,14 @@ importers:
         specifier: ^4.5.4
         version: 4.9.5
 
-  packages/acme-core:
+  packages/core:
     devDependencies:
       '@sieutoc/tsconfig':
         specifier: workspace:*
         version: link:../sieutoc-tsconfig
       '@types/react':
         specifier: ^18.2.0
-        version: 18.2.30
+        version: 18.2.31
       '@types/react-dom':
         specifier: ^18.2.0
         version: 18.2.14
@@ -81,33 +81,6 @@ importers:
       react:
         specifier: ^17.0.2
         version: 17.0.2
-      tsup:
-        specifier: ^5.10.1
-        version: 5.12.9(typescript@4.9.5)
-      typescript:
-        specifier: ^4.5.3
-        version: 4.9.5
-
-  packages/acme-utils:
-    devDependencies:
-      '@sieutoc/tsconfig':
-        specifier: workspace:*
-        version: link:../sieutoc-tsconfig
-      '@types/react':
-        specifier: ^18.2.0
-        version: 18.2.30
-      '@types/react-dom':
-        specifier: ^18.2.0
-        version: 18.2.14
-      eslint:
-        specifier: ^7.32.0
-        version: 7.32.0
-      eslint-config-sieutoc:
-        specifier: workspace:*
-        version: link:../eslint-config-sieutoc
-      react:
-        specifier: ^18.2.0
-        version: 18.2.0
       tsup:
         specifier: ^5.10.1
         version: 5.12.9(typescript@4.9.5)
@@ -131,6 +104,33 @@ importers:
         version: 7.28.0(eslint@7.32.0)
 
   packages/sieutoc-tsconfig: {}
+
+  packages/utils:
+    devDependencies:
+      '@sieutoc/tsconfig':
+        specifier: workspace:*
+        version: link:../sieutoc-tsconfig
+      '@types/react':
+        specifier: ^18.2.0
+        version: 18.2.31
+      '@types/react-dom':
+        specifier: ^18.2.0
+        version: 18.2.14
+      eslint:
+        specifier: ^7.32.0
+        version: 7.32.0
+      eslint-config-sieutoc:
+        specifier: workspace:*
+        version: link:../eslint-config-sieutoc
+      react:
+        specifier: ^18.2.0
+        version: 18.2.0
+      tsup:
+        specifier: ^5.10.1
+        version: 5.12.9(typescript@4.9.5)
+      typescript:
+        specifier: ^4.5.3
+        version: 4.9.5
 
 packages:
 
@@ -593,11 +593,11 @@ packages:
   /@types/react-dom@18.2.14:
     resolution: {integrity: sha512-V835xgdSVmyQmI1KLV2BEIUgqEuinxp9O4G6g3FqO/SqLac049E53aysv0oEFD2kHfejeKU+ZqL2bcFWj9gLAQ==}
     dependencies:
-      '@types/react': 18.2.30
+      '@types/react': 18.2.31
     dev: true
 
-  /@types/react@18.2.30:
-    resolution: {integrity: sha512-OfqdJnDsSo4UNw0bqAjFCuBpLYQM7wvZidz0hVxHRjrEkzRlvZL1pJVyOSY55HMiKvRNEo9DUBRuEl7FNlJ/Vg==}
+  /@types/react@18.2.31:
+    resolution: {integrity: sha512-c2UnPv548q+5DFh03y8lEDeMfDwBn9G3dRwfkrxQMo/dOtRHUUO57k6pHvBIfH/VF4Nh+98mZ5aaSe+2echD5g==}
     dependencies:
       '@types/prop-types': 15.7.9
       '@types/scheduler': 0.16.5

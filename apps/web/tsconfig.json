@@ -3,6 +3,11 @@
   "compilerOptions": {
     "outDir": "dist",
     "incremental": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
     "plugins": [
       {
         "name": "next"
@@ -10,7 +15,8 @@
     ]
   },
   "include": [
-    "src",
+    "**/*.ts",
+    "**/*.tsx",
     "next-env.d.ts",
     ".next/types/**/*.ts"
   ],
