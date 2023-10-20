@@ -42,9 +42,9 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@acme/tsconfig':
+      '@sieutoc/tsconfig':
         specifier: workspace:*
-        version: link:../../packages/acme-tsconfig
+        version: link:../../packages/sieutoc-tsconfig
       '@types/node':
         specifier: ^17.0.12
         version: 17.0.45
@@ -63,9 +63,9 @@ importers:
 
   packages/acme-core:
     devDependencies:
-      '@acme/tsconfig':
+      '@sieutoc/tsconfig':
         specifier: workspace:*
-        version: link:../acme-tsconfig
+        version: link:../sieutoc-tsconfig
       '@types/react':
         specifier: ^18.2.0
         version: 18.2.30
@@ -88,13 +88,11 @@ importers:
         specifier: ^4.5.3
         version: 4.9.5
 
-  packages/acme-tsconfig: {}
-
   packages/acme-utils:
     devDependencies:
-      '@acme/tsconfig':
+      '@sieutoc/tsconfig':
         specifier: workspace:*
-        version: link:../acme-tsconfig
+        version: link:../sieutoc-tsconfig
       '@types/react':
         specifier: ^18.2.0
         version: 18.2.30
@@ -131,6 +129,8 @@ importers:
       eslint-plugin-react:
         specifier: 7.28.0
         version: 7.28.0(eslint@7.32.0)
+
+  packages/sieutoc-tsconfig: {}
 
 packages:
 

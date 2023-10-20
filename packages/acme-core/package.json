@@ -13,10 +13,11 @@
     "build": "tsup src/index.tsx --format esm,cjs --dts --external react",
     "dev": "tsup src/index.tsx --format esm,cjs --watch --dts --external react",
     "lint": "eslint \"src/**/*.ts*\"",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@acme/tsconfig": "workspace:*",
+    "@sieutoc/tsconfig": "workspace:*",
     "eslint": "^7.32.0",
     "eslint-config-sieutoc": "workspace:*",
     "@types/react": "^18.2.0",
