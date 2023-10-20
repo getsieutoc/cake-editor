@@ -46,8 +46,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/sieutoc-tsconfig
       '@types/node':
-        specifier: 17.0.12
-        version: 17.0.12
+        specifier: 17.0.45
+        version: 17.0.45
       '@types/react':
         specifier: 18.2.0
         version: 18.2.0
@@ -777,8 +777,8 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: true
 
-  /@types/node@17.0.12:
-    resolution: {integrity: sha512-4YpbAsnJXWYK/fpTVFlMIcUIho2AYCi4wg5aNPrG1ng7fn/1/RZfCIpRCiBX+12RVa34RluilnvCqD+g3KiSiA==}
+  /@types/node@17.0.45:
+    resolution: {integrity: sha512-w+tIMs3rq2afQdsPJlODhoUEKzFP1ayaoyl1CcnwtIlsVe7K7bA1NGm4s3PraqTLlXnbIN84zuBlxBWo1u9BLw==}
     dev: true
 
   /@types/normalize-package-data@2.4.3:
