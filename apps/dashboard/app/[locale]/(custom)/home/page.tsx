@@ -10,7 +10,6 @@ import {
 } from '@/components/chakra';
 import { Business, DataExploration, OutlineDesignServices } from '@/icons';
 import { Metadata } from '@/types';
-import { Editor as CakeEditor } from '@sieutoc/cake-editor';
 
 export const metadata: Metadata = {
   title: 'Home | Nextjs Template',
@@ -20,8 +19,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <Box>
-      <CakeEditor />
-      {/* <HStack width="100%" spacing={30}>
+      <HStack width="100%" spacing={30}>
         <Card rounded={30} background="#9ccbf7" width="50%">
           <CardBody padding={10}>
             <Avatar src="/img/sangdth.jpg" size="2xl" />
@@ -82,7 +80,7 @@ export default function HomePage() {
             </Box>
           </HStack>
         </VStack>
-      </HStack> */}
+      </HStack>
     </Box>
   );
 }
