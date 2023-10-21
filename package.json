@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev --no-cache --continue",
+    "dev":"docker-compose up -d && pnpm run watch && docker-compose down",
+    "watch": "trap 'exit 0' SIGINT; dotenv -- turbo run dev --no-cache --continue",
     "lint": "turbo lint",
     "clean": "turbo clean && rm -rf node_modules && pnpm i",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -13,6 +14,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "2.26.2",
+    "dotenv-cli": "7.3.0",
     "eslint": "8.52.0",
     "eslint-config-sieutoc": "workspace:*",
     "prettier": "3.0.3",
