@@ -15,7 +15,6 @@ import {
 } from '@/components/chakra';
 import { useAuth, useEffect, useRouter, useState, useToast } from '@/hooks';
 import { ChevronDownIcon, ChevronUpIcon } from '@/icons';
-import { TextEditor } from '@/components/client';
 import type { Post } from '@/types';
 import slugify from 'slugify';
 
@@ -165,8 +164,6 @@ export default function BlogEditForm({ data }: BlogEditFormProps) {
           size="sm"
           marginY={1}
         />
-
-        <TextEditor onChange={(text) => setContent(text)} value={content} />
       </Box>
       <Box w="20%">
         <Card>
