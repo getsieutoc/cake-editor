@@ -193,43 +193,6 @@ importers:
         specifier: 5.2.2
         version: 5.2.2
 
-  apps/web:
-    dependencies:
-      '@sieutoc/cake-editor':
-        specifier: workspace:*
-        version: link:../../packages/core
-      next:
-        specifier: 13.5.6
-        version: 13.5.6(react-dom@18.2.0)(react@18.2.0)
-      react:
-        specifier: 18.2.0
-        version: 18.2.0
-      react-dom:
-        specifier: 18.2.0
-        version: 18.2.0(react@18.2.0)
-      utils:
-        specifier: workspace:*
-        version: link:../../packages/utils
-    devDependencies:
-      '@sieutoc/tsconfig':
-        specifier: workspace:*
-        version: link:../../packages/sieutoc-tsconfig
-      '@types/node':
-        specifier: 18.18.6
-        version: 18.18.6
-      '@types/react':
-        specifier: 18.2.31
-        version: 18.2.31
-      '@types/react-dom':
-        specifier: 18.2.14
-        version: 18.2.14
-      eslint-config-sieutoc:
-        specifier: workspace:*
-        version: link:../../packages/eslint-config-sieutoc
-      typescript:
-        specifier: 5.2.2
-        version: 5.2.2
-
   packages/core:
     dependencies:
       '@react-three/drei':
@@ -2913,10 +2876,6 @@ packages:
 
   /@types/node@12.20.55:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
-    dev: true
-
-  /@types/node@18.18.6:
-    resolution: {integrity: sha512-wf3Vz+jCmOQ2HV1YUJuCWdL64adYxumkrxtc+H1VUQlnQI04+5HtH+qZCOE21lBE7gIrt+CwX2Wv8Acrw5Ak6w==}
     dev: true
 
   /@types/node@20.8.7:

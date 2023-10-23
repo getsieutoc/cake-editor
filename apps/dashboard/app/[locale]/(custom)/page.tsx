@@ -1,5 +1,6 @@
 import { getDictionary } from '@/utils/dictionary';
 import { Locale } from '@/types';
+import { Editor } from '@sieutoc/cake-editor';
 
 export default async function HomePage({
   params: { locale },
@@ -13,6 +14,7 @@ export default async function HomePage({
       <div>
         <h1>{page.home.title}</h1>
         <p>{page.home.description}</p>
+        <Editor />
       </div>
     </section>
   );
