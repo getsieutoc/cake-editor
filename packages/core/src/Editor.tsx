@@ -3,7 +3,7 @@ export interface EditorProps {
 }
 
 export function Editor(props: EditorProps) {
-   return <div>{props.title ?? "Cake Editor 12312 dsad sad s"}</div>;
+   return <div>{props.title ?? "Cake Editor"}</div>;
 }
 
 Editor.displayName = "Editor";
