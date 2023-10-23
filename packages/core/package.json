@@ -38,8 +38,12 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
+    "@chakra-ui/react": "2.8.1",
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
     "@react-three/drei": "9.88.4",
     "@react-three/fiber": "8.15.1",
+    "framer-motion": "10.16.4",
     "leva": "0.9.35",
     "three": "0.157.0"
   }
