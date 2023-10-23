@@ -20,7 +20,7 @@ import slugify from 'slugify';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useSWR, useAuth, useToast } from '@/hooks';
 import { ChevronDownIcon, ChevronUpIcon } from '@/icons';
-import { PostList, TextEditor } from '@/components/client';
+import { PostList } from '@/components/client';
 import type { Post } from '@/types';
 
 type RequireInputType = {
@@ -190,8 +190,6 @@ export default function BlogEditor() {
             size="sm"
             marginY={1}
           />
-
-          <TextEditor onChange={(text) => setContent(text)} value={content} />
         </Box>
         <Box w="20%">
           <Card>

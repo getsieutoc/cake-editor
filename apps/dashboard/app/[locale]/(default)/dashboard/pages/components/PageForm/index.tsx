@@ -8,7 +8,7 @@ import {
   Input,
   Stack,
 } from '@/components/chakra';
-import { CustomEditable, FormWrapper, TextEditor } from '@/components/client';
+import { CustomEditable, FormWrapper } from '@/components/client';
 import {
   useAuth,
   useEffect,
@@ -182,14 +182,6 @@ export const PageForm = ({
 
         <FormControl id="text-editor" isDisabled={isLoading}>
           <FormLabel>Content</FormLabel>
-          <TextEditor
-            id="text-editor"
-            name="content"
-            value={inputData.content}
-            onChange={(newValue) =>
-              setInputData({ ...inputData, content: newValue })
-            }
-          />
         </FormControl>
         <Flex width="100%" justify="end">
           <Button

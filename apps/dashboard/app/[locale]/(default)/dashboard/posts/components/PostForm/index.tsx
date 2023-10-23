@@ -17,12 +17,7 @@ import {
   TabPanels,
   Tabs,
 } from '@/components/chakra';
-import {
-  CustomEditable,
-  FormWrapper,
-  GoBackButton,
-  TextEditor,
-} from '@/components/client';
+import { CustomEditable, FormWrapper, GoBackButton } from '@/components/client';
 import {
   AddIcon,
   ArrowUpIcon,
@@ -259,14 +254,6 @@ export const PostForm = ({
 
               <FormControl id="text-editor" isDisabled={isLoading}>
                 <FormLabel>Content</FormLabel>
-                <TextEditor
-                  id="text-editor"
-                  name="content"
-                  value={data.content}
-                  onChange={(newValue) =>
-                    setInputData({ ...data, content: newValue })
-                  }
-                />
               </FormControl>
             </Stack>
           </TabPanel>
