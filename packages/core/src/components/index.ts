@@ -14,6 +14,7 @@ export {
    GizmoViewport,
    ContactShadows,
    OrbitControls,
+   TransformControls,
 } from "@react-three/drei";
 export { useControls, Leva } from "leva";
 export * from "./Geometries";
