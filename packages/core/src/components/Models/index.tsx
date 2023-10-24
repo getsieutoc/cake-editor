@@ -21,6 +21,7 @@ type ModelType = {
    defaultColor?: string;
    keyMap?: { [key: string]: boolean };
 };
+
 export function Model(props: ModelType) {
    const {
       path,
@@ -31,6 +32,7 @@ export function Model(props: ModelType) {
    } = props;
    const { scene } = useGLTF(path);
    const [hovered, setHovered] = useState(false);
+
    useCursor(hovered);
    useFrame((__, delta) => {
       if (primitiveRef && primitiveRef?.current) {
@@ -83,6 +85,7 @@ export function Model(props: ModelType) {
 
    useControls(CONTROLS_LEVA.Colors, () => {
       const colors = scene.children.reduce((acc, m: any) => {
+         m.castShadow = true;
          const data = m.material
             ? Object.assign(acc, {
                  [m.material?.name?.toUpperCase()]: {
@@ -104,9 +107,10 @@ export function Model(props: ModelType) {
          object={scene}
          scale={scale}
          position={position}
-         onPointerOver={(e: ThreeEvent<PointerEvent>) => (
-            e.stopPropagation(), setHovered(true)
-         )}
+         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
+            e.stopPropagation();
+            setHovered(true);
+         }}
          onPointerOut={() => setHovered(false)}
          castShadow
       >

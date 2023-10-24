@@ -11,15 +11,16 @@ import {
    Spinner,
    Environment,
    useControls,
-   OrbitControls,
    GizmoHelper,
    GizmoViewport,
    ContactShadows,
    PrimitiveProps,
 } from "@/components";
 import { useKeyboard } from "@/hooks";
-import { CONTROLS_LEVA } from "@/utils/constants";
-import { ModelType } from "@/utils/types";
+import { CONTROLS_LEVA, modes } from "@/utils/constants";
+import { ModelType, ThreeEvent } from "@/utils/types";
+import { useControlModel } from "@/globalStates";
+import { Controls } from "../Controls";
 
 type CakeEditorType = {
    background?: string;
@@ -31,6 +32,7 @@ export function CakeEditor(props: CakeEditorType) {
    const [autoRotate, setAutoRotate] = useState(false);
    const primitiveRefs = useRef<{ current: PrimitiveProps | null }[]>([]);
    const keyMap = useKeyboard();
+   const { selectedModel, setModel } = useControlModel();
 
    useEffect(() => {
       setHeight(window.innerHeight);
@@ -45,7 +47,31 @@ export function CakeEditor(props: CakeEditorType) {
          onChange: (v) => setAutoRotate(v),
       },
    });
-
+   const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
+      e.stopPropagation();
+      const obj = e.object as THREE.Mesh & {
+         material: { name: string };
+      };
+      setModel({ id: obj.uuid, name: obj.name });
+      const materialName = obj.material.name;
+      document
+         .getElementById(
+            `${CONTROLS_LEVA.Colors}.` + materialName.toUpperCase()
+         )
+         ?.focus();
+   };
+   const handlePointerMissed = (e: MouseEvent) => {
+      e.type === "click" && setModel({ id: null, name: "", mode: 0 });
+   };
+   const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
+      if (selectedModel.name === e.object.name) {
+         e.stopPropagation();
+         setModel({
+            ...selectedModel,
+            mode: ((selectedModel?.mode ?? 0) + 1) % modes.length,
+         });
+      }
+   };
    return (
       <Box width="100%" height={height}>
          <Box position="relative">
@@ -68,19 +94,9 @@ export function CakeEditor(props: CakeEditorType) {
                <Lights />
                <group
                   dispose={null}
-                  onClick={(e) => {
-                     e.stopPropagation();
-                     const obj = e.object as THREE.Mesh & {
-                        material: { name: string };
-                     };
-                     const materialName = obj.material.name;
-                     document
-                        .getElementById(
-                           `${CONTROLS_LEVA.Colors}.` +
-                              materialName.toUpperCase()
-                        )
-                        ?.focus();
-                  }}
+                  onClick={handleClickModel}
+                  onPointerMissed={handlePointerMissed}
+                  onContextMenu={handleContextMenu}
                   castShadow
                >
                   {models.map((model, index) => (
@@ -94,6 +110,7 @@ export function CakeEditor(props: CakeEditorType) {
                         position={model.position}
                      />
                   ))}
+
                   <Crystals position={[-10, 0, 3]} count={4} countChild={3} />
                </group>
 
@@ -105,11 +122,12 @@ export function CakeEditor(props: CakeEditorType) {
                <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
                   <GizmoViewport labelColor="white" axisHeadScale={1} />
                </GizmoHelper>
-               <OrbitControls
+               <Controls
                   makeDefault
                   maxDistance={10}
                   minDistance={3}
                   autoRotate={autoRotate}
+                  maxPolarAngle={Math.PI / 2.8}
                />
             </Canvas>
          </Suspense>

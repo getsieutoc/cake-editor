@@ -14,7 +14,7 @@ export const models: {
   {
     name: 'Flowers',
     path: '/models/flowers.glb',
-    position: [3.5, 0, -3],
+    position: [-2, 0, -1],
     scale: [0.5, 0.5, 0.5],
   },
   {
