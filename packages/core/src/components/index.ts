@@ -7,8 +7,7 @@ export {
    Stats,
    Html,
    Sphere,
-   useGLTF,
-   useCursor,
+   Merged,
    Environment,
    GizmoHelper,
    GizmoViewport,
@@ -16,9 +15,10 @@ export {
    OrbitControls,
    TransformControls,
 } from "@react-three/drei";
-export { useControls, Leva } from "leva";
+export { Leva } from "leva";
 export * from "./Geometries";
 export * from "./Lights";
 export * from "./Models";
 export * from "./Overlay";
 export * from "./Editor";
+export * from "./Controls";

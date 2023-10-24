@@ -8,20 +8,18 @@ import {
    Canvas,
    Overlay,
    Crystals,
-   Spinner,
    Progress,
+   Controls,
    Environment,
-   useControls,
    GizmoHelper,
    GizmoViewport,
    ContactShadows,
    PrimitiveProps,
 } from "@/components";
-import { useKeyboard, useProgress } from "@/hooks";
+import { useKeyboard, useProgress, useControls } from "@/hooks";
 import { CONTROLS_LEVA, modes } from "@/utils/constants";
 import { ModelType, ThreeEvent } from "@/utils/types";
 import { useControlModel } from "@/globalStates";
-import { Controls } from "../Controls";
 
 type CakeEditorType = {
    background?: string;

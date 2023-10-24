@@ -4,13 +4,11 @@ import {
    Box,
    Html,
    THREE,
-   useGLTF,
    useFrame,
-   useCursor,
-   useControls,
    PrimitiveProps,
    type ThreeEvent,
 } from "@/components";
+import { useCursor, useGLTF, useControls } from "@/hooks";
 
 type ModelType = {
    primitiveRef?: { current: PrimitiveProps | null };
