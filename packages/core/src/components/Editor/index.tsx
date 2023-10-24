@@ -9,6 +9,7 @@ import {
    Overlay,
    Crystals,
    Spinner,
+   Progress,
    Environment,
    useControls,
    GizmoHelper,
@@ -16,7 +17,7 @@ import {
    ContactShadows,
    PrimitiveProps,
 } from "@/components";
-import { useKeyboard } from "@/hooks";
+import { useKeyboard, useProgress } from "@/hooks";
 import { CONTROLS_LEVA, modes } from "@/utils/constants";
 import { ModelType, ThreeEvent } from "@/utils/types";
 import { useControlModel } from "@/globalStates";
@@ -33,6 +34,13 @@ export function CakeEditor(props: CakeEditorType) {
    const primitiveRefs = useRef<{ current: PrimitiveProps | null }[]>([]);
    const keyMap = useKeyboard();
    const { selectedModel, setModel } = useControlModel();
+   const { progress } = useProgress();
+   useControls(CONTROLS_LEVA.Auto_rotate, {
+      "start/stop": {
+         value: autoRotate,
+         onChange: (v) => setAutoRotate(v),
+      },
+   });
 
    useEffect(() => {
       setHeight(window.innerHeight);
@@ -41,12 +49,6 @@ export function CakeEditor(props: CakeEditorType) {
       });
    }, []);
 
-   useControls(CONTROLS_LEVA.Auto_rotate, {
-      "start/stop": {
-         value: autoRotate,
-         onChange: (v) => setAutoRotate(v),
-      },
-   });
    const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
       const obj = e.object as THREE.Mesh & {
@@ -81,7 +83,14 @@ export function CakeEditor(props: CakeEditorType) {
          <Suspense
             fallback={
                <Box textAlign="center">
-                  Loading... <Spinner />
+                  <Progress
+                     top={10}
+                     value={progress}
+                     rounded={5}
+                     colorScheme="pink"
+                     size="xs"
+                  />
+                  {Math.floor(progress) + "%"}
                </Box>
             }
          >
@@ -131,7 +140,12 @@ export function CakeEditor(props: CakeEditorType) {
                />
             </Canvas>
          </Suspense>
-         <Leva collapsed={false} />
+         <Leva
+            collapsed={false}
+            titleBar={{
+               position: { x: 0, y: 90 },
+            }}
+         />
       </Box>
    );
 }

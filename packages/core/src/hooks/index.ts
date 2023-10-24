@@ -7,3 +7,4 @@ export {
    useStore,
 } from "@react-three/fiber";
 export { useControls } from "leva";
+export { useProgress } from "@react-three/drei";
