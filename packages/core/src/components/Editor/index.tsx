@@ -138,12 +138,7 @@ export function CakeEditor(props: CakeEditorType) {
                />
             </Canvas>
          </Suspense>
-         <Leva
-            collapsed={false}
-            titleBar={{
-               position: { x: 0, y: 90 },
-            }}
-         />
+         <Leva collapsed={true} />
       </Box>
    );
 }
