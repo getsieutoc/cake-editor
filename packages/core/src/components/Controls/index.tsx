@@ -2,24 +2,31 @@ import { OrbitControls, TransformControls } from "@/components";
 import { useThree } from "@/hooks";
 import { useControlModel } from "@/globalStates";
 import { modes } from "@/utils/constants";
-import { OrbitControlsProps } from "@/utils/types";
 
-type ControlType = OrbitControlsProps & {};
+type ControlType = {
+   autoRotate?: boolean;
+};
 export function Controls(props: ControlType) {
-   const { selectedModel, setModel } = useControlModel();
+   const { autoRotate = false } = props;
+   const { selectedModel } = useControlModel();
    const scene = useThree((state) => state.scene);
+   const objectSelected = scene.getObjectByName(selectedModel.name ?? "");
 
    return (
       <>
-         {/* As of drei@7.13 transform-controls can refer to the target by children, or the object prop */}
-         {selectedModel.name && (
+         {objectSelected?.parent && (
             <TransformControls
-               object={scene.getObjectByName(selectedModel.name)}
+               object={objectSelected}
                mode={modes[selectedModel?.mode ?? 0]}
             />
          )}
-         {/* makeDefault makes the controls known to r3f, now transform-controls can auto-disable them when active */}
-         <OrbitControls {...props} />
+         <OrbitControls
+            makeDefault /* makeDefault makes the controls known to r3f, now transform-controls can auto-disable them when active */
+            maxDistance={10}
+            minDistance={3}
+            autoRotate={autoRotate}
+            maxPolarAngle={Math.PI / 2.8}
+         />
       </>
    );
 }

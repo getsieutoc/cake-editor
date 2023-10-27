@@ -1,17 +1,11 @@
-import { useMemo, useState } from "react";
-import { CONTROLS_LEVA } from "@/utils/constants";
-import {
-   Box,
-   Html,
-   THREE,
-   useFrame,
-   PrimitiveProps,
-   type ThreeEvent,
-} from "@/components";
+import { useMemo, useRef, useState } from "react";
+import { Box, Html, THREE, useFrame, type ThreeEvent } from "@/components";
 import { useCursor, useGLTF, useControls } from "@/hooks";
+import { GroupProps, PrimitiveProps } from "@/utils/types";
+import { CONTROLS_LEVA, __GROUP_MODEL__ } from "@/utils/constants";
+import { useControlModel } from "@/globalStates";
 
-type ModelType = {
-   primitiveRef?: { current: PrimitiveProps | null };
+type ModelType = GroupProps & {
    path: string;
    position?: number[];
    rotate?: number[];
@@ -25,15 +19,20 @@ export function Model(props: ModelType) {
       path,
       position = [0, 0, 0],
       scale = [1, 1, 1],
-      primitiveRef,
       keyMap,
+      ...rest
    } = props;
    const { scene } = useGLTF(path);
    const [hovered, setHovered] = useState(false);
+   const { selectedModel } = useControlModel();
+   const primitiveRef = useRef<PrimitiveProps>(null);
 
    useCursor(hovered);
    useFrame((__, delta) => {
-      if (primitiveRef && primitiveRef?.current) {
+      const isDragByKey =
+         primitiveRef?.current?.uuid === selectedModel?.parentId;
+
+      if (isDragByKey && primitiveRef.current) {
          keyMap?.["KeyA"] && (primitiveRef.current.position.x -= 1 * delta);
          keyMap?.["KeyD"] && (primitiveRef.current.position.x += 1 * delta);
          keyMap?.["KeyW"] && (primitiveRef.current.position.z -= 1 * delta);
@@ -100,19 +99,23 @@ export function Model(props: ModelType) {
    });
 
    return (
-      <primitive
-         ref={primitiveRef}
-         object={scene}
-         scale={scale}
-         position={position}
-         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
-            e.stopPropagation();
-            setHovered(true);
-         }}
-         onPointerOut={() => setHovered(false)}
-         castShadow
-      >
-         {annotations}
-      </primitive>
+      <group {...rest} name={__GROUP_MODEL__}>
+         <primitive
+            ref={primitiveRef}
+            object={scene}
+            scale={scale}
+            position={position}
+            onPointerOver={(e: ThreeEvent<PointerEvent>) => {
+               e.stopPropagation();
+               setHovered(true);
+            }}
+            onPointerOut={() => {
+               setHovered(false);
+            }}
+            castShadow
+         >
+            {annotations}
+         </primitive>
+      </group>
    );
 }

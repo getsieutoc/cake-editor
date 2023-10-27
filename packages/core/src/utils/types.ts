@@ -1,7 +1,12 @@
 export type { OrbitControlsProps } from "@react-three/drei";
 
 export type * from "@chakra-ui/react";
-export type { MeshProps, ThreeEvent } from "@react-three/fiber";
+export type {
+   MeshProps,
+   ThreeEvent,
+   GroupProps,
+   PrimitiveProps,
+} from "@react-three/fiber";
 export type ModelType = {
    name?: string;
    path: string;

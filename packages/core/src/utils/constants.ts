@@ -6,5 +6,6 @@ export const CONTROLS_LEVA = {
    Directional_Light: "Directional Light",
    Directional_Light_2: "Directional Light 2",
 };
+export const __GROUP_MODEL__ = "__GROUP_MODEL__";
 
 export const modes: ModeType[] = ["translate", "rotate", "scale"];
