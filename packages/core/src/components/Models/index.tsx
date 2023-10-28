@@ -2,13 +2,19 @@ import { useMemo, useRef, useState } from "react";
 import { Box, Html, THREE, useFrame, type ThreeEvent } from "@/components";
 import { useCursor, useGLTF, useControls } from "@/hooks";
 import { GroupProps, PrimitiveProps } from "@/utils/types";
-import { CONTROLS_LEVA, __GROUP_MODEL__ } from "@/utils/constants";
+import {
+   CONTROLS_LEVA,
+   SHORT_CUTS,
+   __GROUP_MODEL__,
+   __PRIMITIVE_MODEL__,
+} from "@/utils/constants";
 import { useControlModel } from "@/globalStates";
+import { getGroupObjectSelected } from "@/utils/service";
 
 type ModelType = GroupProps & {
    path: string;
    position?: number[];
-   rotate?: number[];
+   rotation?: number[];
    scale?: number[];
    defaultColor?: string;
    keyMap?: { [key: string]: boolean };
@@ -19,24 +25,46 @@ export function Model(props: ModelType) {
       path,
       position = [0, 0, 0],
       scale = [1, 1, 1],
+      rotation,
       keyMap,
       ...rest
    } = props;
    const { scene } = useGLTF(path);
    const [hovered, setHovered] = useState(false);
-   const { selectedModel } = useControlModel();
+   const { selectedModel, setModel, resetSelectedModel } = useControlModel();
    const primitiveRef = useRef<PrimitiveProps>(null);
-
    useCursor(hovered);
+
    useFrame((__, delta) => {
       const isDragByKey =
          primitiveRef?.current?.uuid === selectedModel?.parentId;
 
       if (isDragByKey && primitiveRef.current) {
-         keyMap?.["KeyA"] && (primitiveRef.current.position.x -= 1 * delta);
-         keyMap?.["KeyD"] && (primitiveRef.current.position.x += 1 * delta);
-         keyMap?.["KeyW"] && (primitiveRef.current.position.z -= 1 * delta);
-         keyMap?.["KeyS"] && (primitiveRef.current.position.z += 1 * delta);
+         keyMap?.[SHORT_CUTS.ArrowLeft] &&
+            (primitiveRef.current.position.x -= 1 * delta);
+         keyMap?.[SHORT_CUTS.ArrowRight] &&
+            (primitiveRef.current.position.x += 1 * delta);
+         keyMap?.[SHORT_CUTS.ArrowUp] &&
+            (primitiveRef.current.position.z -= 1 * delta);
+         keyMap?.[SHORT_CUTS.ArrowDown] &&
+            (primitiveRef.current.position.z += 1 * delta);
+
+         keyMap?.[SHORT_CUTS.KeyG] &&
+            setModel({
+               ...selectedModel,
+               mode: 0,
+            });
+
+         keyMap?.[SHORT_CUTS.KeyR] &&
+            setModel({
+               ...selectedModel,
+               mode: 1,
+            });
+         keyMap?.[SHORT_CUTS.KeyS] &&
+            setModel({
+               ...selectedModel,
+               mode: 2,
+            });
       }
    });
    const annotations = useMemo(() => {
@@ -83,6 +111,7 @@ export function Model(props: ModelType) {
    useControls(CONTROLS_LEVA.Colors, () => {
       const colors = scene.children.reduce((acc, m: any) => {
          m.castShadow = true;
+         m.receiveShadow = true;
          const data = m.material
             ? Object.assign(acc, {
                  [m.material?.name?.toUpperCase()]: {
@@ -97,22 +126,69 @@ export function Model(props: ModelType) {
       }, {});
       return colors;
    });
+   const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
+      e.stopPropagation();
 
+      const obj = e.object as THREE.Mesh & {
+         material: { name: string };
+      };
+      const groupObject = getGroupObjectSelected(obj);
+      const isChild = groupObject?.children?.find(
+         (o) => o.uuid === selectedModel.id
+      );
+      if (!isChild) {
+         setModel({
+            id: obj.uuid,
+            parentId: groupObject?.uuid,
+            name: obj.name,
+         });
+
+         const materialName = obj.material.name;
+
+         document
+            .getElementById(
+               `${CONTROLS_LEVA.Colors}.` + materialName.toUpperCase()
+            )
+            ?.focus();
+      }
+   };
+   const handlePointerMissed = (e: MouseEvent) => {
+      e.type === "dblclick" && resetSelectedModel();
+   };
+   const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
+      console.log("right click :>> ", e);
+      // if (selectedModel.name === e.object.name) {
+      //    e.stopPropagation();
+      //    setModel({
+      //       ...selectedModel,
+      //       mode: ((selectedModel?.mode ?? 0) + 1) % modes.length,
+      //    });
+      // }
+   };
    return (
-      <group {...rest} name={__GROUP_MODEL__}>
+      <group
+         onClick={handleClickModel}
+         onPointerMissed={handlePointerMissed}
+         onContextMenu={handleContextMenu}
+         name={__GROUP_MODEL__}
+         castShadow
+         receiveShadow
+         {...rest}
+      >
          <primitive
+            name={__PRIMITIVE_MODEL__}
             ref={primitiveRef}
             object={scene}
             scale={scale}
+            rotation={rotation}
             position={position}
             onPointerOver={(e: ThreeEvent<PointerEvent>) => {
                e.stopPropagation();
                setHovered(true);
             }}
-            onPointerOut={() => {
-               setHovered(false);
-            }}
+            onPointerOut={() => setHovered(false)}
             castShadow
+            receiveShadow
          >
             {annotations}
          </primitive>

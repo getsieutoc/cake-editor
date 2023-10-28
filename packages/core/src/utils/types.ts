@@ -1,4 +1,7 @@
-export type { OrbitControlsProps } from "@react-three/drei";
+export type {
+   OrbitControlsProps,
+   TransformControlsProps,
+} from "@react-three/drei";
 
 export type * from "@chakra-ui/react";
 export type {
@@ -12,7 +15,7 @@ export type ModelType = {
    path: string;
    position?: [number, number, number];
    scale?: [number, number, number];
-   rotate?: [number, number, number];
+   rotation?: [number, number, number];
 };
 
 export type ModeType = "translate" | "rotate" | "scale";

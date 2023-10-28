@@ -1,7 +1,11 @@
 import { useEffect, useRef } from "react";
 
+type KeyMapType = {
+   [key: string]: boolean;
+};
 export function useKeyboard() {
-   const keyMap = useRef<{ [key: string]: boolean }>({});
+   const keyMap = useRef<KeyMapType>({});
+
    useEffect(() => {
       const onDocumentKey = (e: KeyboardEvent) => {
          keyMap.current[e.code] = e.type === "keydown";

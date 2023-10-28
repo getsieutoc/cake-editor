@@ -7,5 +7,15 @@ export const CONTROLS_LEVA = {
    Directional_Light_2: "Directional Light 2",
 };
 export const __GROUP_MODEL__ = "__GROUP_MODEL__";
+export const __PRIMITIVE_MODEL__ = "__PRIMITIVE_MODEL__";
 
 export const modes: ModeType[] = ["translate", "rotate", "scale"];
+export const SHORT_CUTS = {
+   ArrowLeft: "ArrowLeft",
+   ArrowRight: "ArrowRight",
+   ArrowUp: "ArrowUp",
+   ArrowDown: "ArrowDown",
+   KeyS: "KeyS",
+   KeyR: "KeyR",
+   KeyG: "KeyG",
+};

@@ -219,6 +219,9 @@ importers:
       leva:
         specifier: 0.9.35
         version: 0.9.35(@types/react-dom@18.2.14)(@types/react@18.2.31)(react-dom@18.2.0)(react@18.2.0)
+      react-icons:
+        specifier: 4.11.0
+        version: 4.11.0(react@18.2.0)
       three:
         specifier: 0.157.0
         version: 0.157.0

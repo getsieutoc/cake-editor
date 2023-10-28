@@ -1,7 +1,7 @@
 export * from "./Editor";
 export * as THREE from "three";
 export * from "@react-three/fiber";
-export { Box, Spinner, Progress } from "@chakra-ui/react";
+export { Box, Button, HStack, Spinner, Progress, Icon } from "@chakra-ui/react";
 export { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 export {
    Stats,
@@ -22,3 +22,5 @@ export * from "./Models";
 export * from "./Overlay";
 export * from "./Editor";
 export * from "./Controls";
+export * from "react-icons/ai";
+export * from "react-icons/bi";

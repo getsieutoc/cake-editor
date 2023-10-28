@@ -4,9 +4,7 @@ import {
    Leva,
    Model,
    Lights,
-   THREE,
    Canvas,
-   Overlay,
    Crystals,
    Progress,
    Controls,
@@ -14,12 +12,11 @@ import {
    GizmoHelper,
    GizmoViewport,
    ContactShadows,
+   ShortCutOverlay,
 } from "@/components";
 import { useKeyboard, useProgress, useControls } from "@/hooks";
-import { CONTROLS_LEVA, modes } from "@/utils/constants";
-import { ModelType, ThreeEvent } from "@/utils/types";
-import { useControlModel } from "@/globalStates";
-import { getGroupObjectSelected } from "@/utils/service";
+import { CONTROLS_LEVA } from "@/utils/constants";
+import { ModelType } from "@/utils/types";
 
 type CakeEditorType = {
    background?: string;
@@ -30,7 +27,7 @@ export function CakeEditor(props: CakeEditorType) {
    const [height, setHeight] = useState(400);
    const [autoRotate, setAutoRotate] = useState(false);
    const keyMap = useKeyboard();
-   const { selectedModel, setModel, resetSelectedModel } = useControlModel();
+
    const { progress } = useProgress();
    useControls(CONTROLS_LEVA.Auto_rotate, {
       "start/stop": {
@@ -43,37 +40,9 @@ export function CakeEditor(props: CakeEditorType) {
       setHeight(window.innerHeight);
    }, []);
 
-   const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
-      e.stopPropagation();
-      const obj = e.object as THREE.Mesh & {
-         material: { name: string };
-      };
-      const groupObject = getGroupObjectSelected(obj);
-      setModel({ id: obj.uuid, parentId: groupObject?.uuid, name: obj.name });
-      const materialName = obj.material.name;
-
-      document
-         .getElementById(
-            `${CONTROLS_LEVA.Colors}.` + materialName.toUpperCase()
-         )
-         ?.focus();
-   };
-   const handlePointerMissed = (e: MouseEvent) => {
-      e.type === "click" && resetSelectedModel();
-   };
-   const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
-      if (selectedModel.name === e.object.name) {
-         e.stopPropagation();
-         setModel({
-            ...selectedModel,
-            mode: ((selectedModel?.mode ?? 0) + 1) % modes.length,
-         });
-      }
-   };
    return (
       <Box width="100%" height={height}>
-         <Overlay />
-
+         <ShortCutOverlay />
          <Suspense
             fallback={
                <Box textAlign="center">
@@ -90,8 +59,8 @@ export function CakeEditor(props: CakeEditorType) {
          >
             <Canvas camera={{ position: [0, 3, 5], fov: 60 }} shadows>
                <Environment
-                  files={background}
                   background
+                  files={background}
                   ground={{ height: 10, radius: 115, scale: 90 }}
                />
                <Lights />
@@ -102,14 +71,11 @@ export function CakeEditor(props: CakeEditorType) {
                      keyMap={keyMap}
                      path={model.path}
                      scale={model.scale}
-                     rotate={model.rotate}
+                     rotation={model.rotation}
                      position={model.position}
-                     dispose={null}
-                     onClick={handleClickModel}
-                     onPointerMissed={handlePointerMissed}
-                     onContextMenu={handleContextMenu}
                      castShadow
                      receiveShadow
+                     dispose={null}
                   />
                ))}
 
@@ -126,7 +92,12 @@ export function CakeEditor(props: CakeEditorType) {
                <Controls autoRotate={autoRotate} />
             </Canvas>
          </Suspense>
-         <Leva collapsed={true} />
+         <Leva
+            collapsed={true}
+            titleBar={{
+               title: "Properties",
+            }}
+         />
       </Box>
    );
 }

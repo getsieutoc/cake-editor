@@ -3,7 +3,7 @@ export const models: {
   path: string;
   position?: [number, number, number];
   scale?: [number, number, number];
-  rotate?: [number, number, number];
+  rotation?: [number, number, number];
 }[] = [
   {
     name: 'Glass',
@@ -13,14 +13,15 @@ export const models: {
   },
   {
     name: 'Flowers',
-    path: '/models/flowers.glb',
-    position: [-2, 0, -1],
+    path: '/models/flowers_decor.glb',
+    position: [-5, 0, -3],
     scale: [0.5, 0.5, 0.5],
+    rotation: [-0.2, 0.5, 0],
   },
   {
     name: 'Straw',
     path: '/models/straw.glb',
-    position: [5, 0, -3],
+    position: [3.2, 0, -3],
     scale: [0.5, 0.5, 0.5],
   },
   {
@@ -38,18 +39,18 @@ export const models: {
   {
     name: 'Chicken child',
     path: '/models/chicken_child.glb',
-    rotate: [0, 0, 0],
-    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    position: [0, 1.6, 0],
   },
   {
     name: 'Blank cake',
-    path: '/models/blank_cake.glb',
-    position: [0, 0, 0],
+    path: '/models/blank_cake_circle.glb',
+    position: [0, 1.1, 0],
   },
   // {
   //   name: 'Baby shark',
   //   path: '/models/baby_shark.glb',
-  //   position: [0, 1, 0],
+  //   position: [0, 1.1, 0.2],
   //   scale: [0.8, 0.8, 0.8],
   // },
   {
