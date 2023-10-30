@@ -6,5 +6,5 @@ export {
    useThree,
    useStore,
 } from "@react-three/fiber";
-export { useControls } from "leva";
-export { useProgress, useGLTF, useCursor } from "@react-three/drei";
+export { useControls, useCreateStore } from "leva";
+export { useProgress, useGLTF, useCursor, useSelect } from "@react-three/drei";

@@ -18,4 +18,5 @@ export const SHORT_CUTS = {
    KeyS: "KeyS",
    KeyR: "KeyR",
    KeyG: "KeyG",
+   KeyD: "KeyD",
 };

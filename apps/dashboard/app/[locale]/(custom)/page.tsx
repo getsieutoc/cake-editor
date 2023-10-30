@@ -15,6 +15,10 @@ export default async function HomePage({
         <Editor
           background="/img/christmas_photo_studio_07_1k.hdr"
           models={models}
+          positionPanel={{
+            x: 0,
+            y: 35,
+          }}
         />
       </div>
     </section>

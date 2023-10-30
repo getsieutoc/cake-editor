@@ -31,6 +31,7 @@ export function Controls(props: ControlType) {
                ref={transformControlsRef}
                object={objectSelected}
                mode={modes[selectedModel?.mode ?? 0]}
+               size={0.5}
             />
          )}
          <OrbitControls

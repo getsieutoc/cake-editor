@@ -17,5 +17,10 @@ export type ModelType = {
    scale?: [number, number, number];
    rotation?: [number, number, number];
 };
-
+export type THREE_MESH = THREE.Mesh & {
+   material: {
+      color: THREE.Color;
+      name: string;
+   };
+};
 export type ModeType = "translate" | "rotate" | "scale";

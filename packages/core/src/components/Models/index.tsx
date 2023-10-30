@@ -1,9 +1,8 @@
 import { useMemo, useRef, useState } from "react";
-import { Box, Html, THREE, useFrame, type ThreeEvent } from "@/components";
-import { useCursor, useGLTF, useControls } from "@/hooks";
-import { GroupProps, PrimitiveProps } from "@/utils/types";
+import { Box, Html, type ThreeEvent } from "@/components";
+import { useCursor, useGLTF, useFrame } from "@/hooks";
+import { GroupProps, PrimitiveProps, THREE_MESH } from "@/utils/types";
 import {
-   CONTROLS_LEVA,
    SHORT_CUTS,
    __GROUP_MODEL__,
    __PRIMITIVE_MODEL__,
@@ -40,6 +39,7 @@ export function Model(props: ModelType) {
          primitiveRef?.current?.uuid === selectedModel?.parentId;
 
       if (isDragByKey && primitiveRef.current) {
+         // move object
          keyMap?.[SHORT_CUTS.ArrowLeft] &&
             (primitiveRef.current.position.x -= 1 * delta);
          keyMap?.[SHORT_CUTS.ArrowRight] &&
@@ -48,7 +48,7 @@ export function Model(props: ModelType) {
             (primitiveRef.current.position.z -= 1 * delta);
          keyMap?.[SHORT_CUTS.ArrowDown] &&
             (primitiveRef.current.position.z += 1 * delta);
-
+         // transform object
          keyMap?.[SHORT_CUTS.KeyG] &&
             setModel({
                ...selectedModel,
@@ -65,6 +65,8 @@ export function Model(props: ModelType) {
                ...selectedModel,
                mode: 2,
             });
+         // remove object
+         keyMap?.[SHORT_CUTS.KeyD] && handleRemove();
       }
    });
    const annotations = useMemo(() => {
@@ -107,31 +109,22 @@ export function Model(props: ModelType) {
       });
       return temp;
    }, [scene]);
-
-   useControls(CONTROLS_LEVA.Colors, () => {
-      const colors = scene.children.reduce((acc, m: any) => {
-         m.castShadow = true;
-         m.receiveShadow = true;
-         const data = m.material
-            ? Object.assign(acc, {
-                 [m.material?.name?.toUpperCase()]: {
-                    value: "#" + m.material?.color?.getHex().toString(16),
-                    onChange: (v: string) => {
-                       m.material.color = new THREE.Color(v);
-                    },
-                 },
-              })
-            : acc;
-         return data;
-      }, {});
-      return colors;
-   });
+   const handleRemove = () => {
+      let children_to_remove: THREE.Object3D<THREE.Object3DEventMap>[] = [];
+      scene.traverse(function (child) {
+         if (child.name === __PRIMITIVE_MODEL__) {
+            children_to_remove = [...children_to_remove, ...child.children];
+         }
+      });
+      children_to_remove.forEach(function (child) {
+         scene.remove(child);
+      });
+      resetSelectedModel();
+   };
    const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
 
-      const obj = e.object as THREE.Mesh & {
-         material: { name: string };
-      };
+      const obj = e.object as THREE_MESH;
       const groupObject = getGroupObjectSelected(obj);
       const isChild = groupObject?.children?.find(
          (o) => o.uuid === selectedModel.id
@@ -141,15 +134,8 @@ export function Model(props: ModelType) {
             id: obj.uuid,
             parentId: groupObject?.uuid,
             name: obj.name,
+            object: obj,
          });
-
-         const materialName = obj.material.name;
-
-         document
-            .getElementById(
-               `${CONTROLS_LEVA.Colors}.` + materialName.toUpperCase()
-            )
-            ?.focus();
       }
    };
    const handlePointerMissed = (e: MouseEvent) => {
@@ -167,12 +153,12 @@ export function Model(props: ModelType) {
    };
    return (
       <group
+         castShadow
+         receiveShadow
+         name={__GROUP_MODEL__}
          onClick={handleClickModel}
          onPointerMissed={handlePointerMissed}
          onContextMenu={handleContextMenu}
-         name={__GROUP_MODEL__}
-         castShadow
-         receiveShadow
          {...rest}
       >
          <primitive
@@ -182,13 +168,13 @@ export function Model(props: ModelType) {
             scale={scale}
             rotation={rotation}
             position={position}
+            castShadow
+            receiveShadow
             onPointerOver={(e: ThreeEvent<PointerEvent>) => {
                e.stopPropagation();
                setHovered(true);
             }}
             onPointerOut={() => setHovered(false)}
-            castShadow
-            receiveShadow
          >
             {annotations}
          </primitive>

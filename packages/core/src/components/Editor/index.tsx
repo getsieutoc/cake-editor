@@ -1,13 +1,16 @@
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, ChangeEvent, useRef } from "react";
 import {
    Box,
    Leva,
+   THREE,
+   HStack,
    Model,
    Lights,
    Canvas,
    Crystals,
    Progress,
    Controls,
+   ColorPicker,
    Environment,
    GizmoHelper,
    GizmoViewport,
@@ -17,18 +20,21 @@ import {
 import { useKeyboard, useProgress, useControls } from "@/hooks";
 import { CONTROLS_LEVA } from "@/utils/constants";
 import { ModelType } from "@/utils/types";
+import { useControlModel } from "@/globalStates";
 
 type CakeEditorType = {
    background?: string;
    models: ModelType[];
+   positionPanel?: { x: number; y: number };
 };
 export function CakeEditor(props: CakeEditorType) {
-   const { background = "", models } = props;
+   const { background = "", models, positionPanel = { x: 0, y: 0 } } = props;
    const [height, setHeight] = useState(400);
    const [autoRotate, setAutoRotate] = useState(false);
    const keyMap = useKeyboard();
-
    const { progress } = useProgress();
+   const { selectedModel } = useControlModel();
+
    useControls(CONTROLS_LEVA.Auto_rotate, {
       "start/stop": {
          value: autoRotate,
@@ -37,12 +43,36 @@ export function CakeEditor(props: CakeEditorType) {
    });
 
    useEffect(() => {
-      setHeight(window.innerHeight);
+      setHeight(window.innerHeight * 0.9);
    }, []);
 
    return (
       <Box width="100%" height={height}>
-         <ShortCutOverlay />
+         {/* ---Helper--- */}
+         <HStack position="absolute" spacing={1} zIndex={1}>
+            <Box position="relative" height="130px">
+               <ShortCutOverlay />
+            </Box>
+            <Box position="relative" height="130px">
+               {selectedModel.id && (
+                  <ColorPicker
+                     width={20}
+                     position="absolute"
+                     fontWeight={600}
+                     fontSize={11}
+                     name={selectedModel.name}
+                     defaultValue={selectedModel.object?.material?.color?.getHexString()}
+                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                        if (selectedModel.object) {
+                           selectedModel.object.material.color =
+                              new THREE.Color(e.target.value);
+                        }
+                     }}
+                  />
+               )}
+            </Box>
+         </HStack>
+         {/* --Loading and Canvas-- */}
          <Suspense
             fallback={
                <Box textAlign="center">
@@ -51,7 +81,6 @@ export function CakeEditor(props: CakeEditorType) {
                      value={progress}
                      rounded={5}
                      colorScheme="pink"
-                     size="xs"
                   />
                   {Math.floor(progress) + "%"}
                </Box>
@@ -92,10 +121,11 @@ export function CakeEditor(props: CakeEditorType) {
                <Controls autoRotate={autoRotate} />
             </Canvas>
          </Suspense>
+
          <Leva
-            collapsed={true}
+            collapsed
             titleBar={{
-               title: "Properties",
+               position: positionPanel,
             }}
          />
       </Box>

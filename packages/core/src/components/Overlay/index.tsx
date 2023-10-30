@@ -17,11 +17,10 @@ export function ShortCutOverlay() {
       <Box
          color="white"
          background="black"
-         position="absolute"
          fontFamily="monospace"
          opacity={0.5}
-         zIndex={1}
          textShadow="1px 1px 2px black"
+         paddingY={1}
       >
          <HStack paddingX={1} spacing={1}>
             <Box>Active when the object is select</Box>
@@ -76,6 +75,17 @@ export function ShortCutOverlay() {
                      G
                   </Box>
                   {` Move/Grab`}
+               </Box>
+               <Box>
+                  <Box
+                     marginLeft={1}
+                     paddingX={1}
+                     border="1px solid gray"
+                     display="inline"
+                  >
+                     D
+                  </Box>
+                  {` Delete`}
                </Box>
                <Box>
                   <Box
