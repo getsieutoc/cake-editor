@@ -1,26 +1,27 @@
-import { useEffect, useState, Suspense, ChangeEvent, useRef } from "react";
+import { useEffect, useState, Suspense, ChangeEvent } from "react";
 import {
    Box,
    Leva,
    THREE,
    HStack,
-   Model,
    Lights,
    Canvas,
+   DataList,
    Crystals,
    Progress,
    Controls,
    ColorPicker,
    Environment,
    GizmoHelper,
+   ModelWrapper,
    GizmoViewport,
    ContactShadows,
    ShortCutOverlay,
 } from "@/components";
-import { useKeyboard, useProgress, useControls } from "@/hooks";
+import { useProgress, useControls } from "@/hooks";
 import { CONTROLS_LEVA } from "@/utils/constants";
 import { ModelType } from "@/utils/types";
-import { useControlModel } from "@/globalStates";
+import { useControlModel, useShowHide } from "@/globalStates";
 
 type CakeEditorType = {
    background?: string;
@@ -30,10 +31,10 @@ type CakeEditorType = {
 export function CakeEditor(props: CakeEditorType) {
    const { background = "", models, positionPanel = { x: 0, y: 0 } } = props;
    const [height, setHeight] = useState(400);
-   const [autoRotate, setAutoRotate] = useState(false);
-   const keyMap = useKeyboard();
    const { progress } = useProgress();
    const { selectedModel } = useControlModel();
+   const { showPanelLeva, setShowPanelLeva, autoRotate, setAutoRotate } =
+      useShowHide();
 
    useControls(CONTROLS_LEVA.Auto_rotate, {
       "start/stop": {
@@ -41,6 +42,16 @@ export function CakeEditor(props: CakeEditorType) {
          onChange: (v) => setAutoRotate(v),
       },
    });
+   useControls(
+      CONTROLS_LEVA.Panel,
+      {
+         show: {
+            value: showPanelLeva,
+            onChange: (v) => setShowPanelLeva(v),
+         },
+      },
+      { collapsed: true }
+   );
 
    useEffect(() => {
       setHeight(window.innerHeight * 0.9);
@@ -52,6 +63,7 @@ export function CakeEditor(props: CakeEditorType) {
          <HStack position="absolute" spacing={1} zIndex={1}>
             <Box position="relative" height="130px">
                <ShortCutOverlay />
+               <DataList data={models} />
             </Box>
             <Box position="relative" height="130px">
                {selectedModel.id && (
@@ -76,12 +88,7 @@ export function CakeEditor(props: CakeEditorType) {
          <Suspense
             fallback={
                <Box textAlign="center">
-                  <Progress
-                     top={10}
-                     value={progress}
-                     rounded={5}
-                     colorScheme="pink"
-                  />
+                  <Progress value={progress} rounded={5} colorScheme="pink" />
                   {Math.floor(progress) + "%"}
                </Box>
             }
@@ -94,19 +101,7 @@ export function CakeEditor(props: CakeEditorType) {
                />
                <Lights />
 
-               {models.map((model, index) => (
-                  <Model
-                     key={index}
-                     keyMap={keyMap}
-                     path={model.path}
-                     scale={model.scale}
-                     rotation={model.rotation}
-                     position={model.position}
-                     castShadow
-                     receiveShadow
-                     dispose={null}
-                  />
-               ))}
+               <ModelWrapper />
 
                <Crystals position={[-10, 0, 3]} count={4} countChild={3} />
 
@@ -123,7 +118,7 @@ export function CakeEditor(props: CakeEditorType) {
          </Suspense>
 
          <Leva
-            collapsed
+            collapsed={!showPanelLeva}
             titleBar={{
                position: positionPanel,
             }}

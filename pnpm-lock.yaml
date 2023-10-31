@@ -222,9 +222,15 @@ importers:
       react-icons:
         specifier: 4.11.0
         version: 4.11.0(react@18.2.0)
+      react-virtuoso:
+        specifier: 4.6.2
+        version: 4.6.2(react-dom@18.2.0)(react@18.2.0)
       three:
         specifier: 0.157.0
         version: 0.157.0
+      uuid:
+        specifier: 9.0.1
+        version: 9.0.1
       zustand:
         specifier: 4.4.4
         version: 4.4.4(@types/react@18.2.31)(react@18.2.0)
@@ -241,6 +247,9 @@ importers:
       '@types/react-dom':
         specifier: 18.2.14
         version: 18.2.14
+      '@types/uuid':
+        specifier: 9.0.6
+        version: 9.0.6
       eslint:
         specifier: 8.52.0
         version: 8.52.0

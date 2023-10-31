@@ -1,5 +1,6 @@
-import { THREE_MESH } from "@/utils/types";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { create } from "zustand";
+import { ModelType, THREE_MESH } from "@/utils/types";
 
 type SelectedModelType = {
    id: string | null;
@@ -41,3 +42,56 @@ export const useControlModel = create<ControlModelTye>()((set) => ({
       }));
    },
 }));
+
+type ShowHideTypes = {
+   autoRotate: boolean;
+   setAutoRotate: (val: boolean) => void;
+   showPanelLeva: boolean;
+   setShowPanelLeva: (val: boolean) => void;
+   showHelper: boolean;
+   setShowHelper: (val: boolean) => void;
+   showListModel: boolean;
+   setShowListModel: (val: boolean) => void;
+};
+export const useShowHide = create<ShowHideTypes>()(
+   persist(
+      (set, get) => ({
+         showHelper: true,
+         setShowHelper: (val: boolean) =>
+            set((state) => ({ ...state, showHelper: val })),
+         showListModel: true,
+         setShowListModel: (val: boolean) =>
+            set((state) => ({ ...state, showListModel: val })),
+         showPanelLeva: true,
+         setShowPanelLeva: (val: boolean) =>
+            set((state) => ({ ...state, showPanelLeva: val })),
+         autoRotate: true,
+         setAutoRotate: (val: boolean) =>
+            set((state) => ({ ...state, autoRotate: val })),
+      }),
+      {
+         name: "shortcut-overlay-helper",
+         storage: createJSONStorage(() => localStorage),
+      }
+   )
+);
+
+type SelectItemTypes = {
+   listItem: ModelType[];
+   setListItem: (val: ModelType) => void;
+   clearList: () => void;
+};
+export const useListModel = create<SelectItemTypes>()(
+   persist(
+      (set, get) => ({
+         listItem: [],
+         setListItem: (val: ModelType) =>
+            set((state) => ({ ...state, listItem: [...state.listItem, val] })),
+         clearList: () => set((state) => ({ ...state, listItem: [] })),
+      }),
+      {
+         name: "selected-item-model-new",
+         storage: createJSONStorage(() => localStorage),
+      }
+   )
+);

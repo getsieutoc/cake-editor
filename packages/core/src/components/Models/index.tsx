@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from "react";
+import { v4 as uuidV4 } from "uuid";
 import { Box, Html, type ThreeEvent } from "@/components";
 import { useCursor, useGLTF, useFrame } from "@/hooks";
 import { GroupProps, PrimitiveProps, THREE_MESH } from "@/utils/types";
@@ -181,3 +182,5 @@ export function Model(props: ModelType) {
       </group>
    );
 }
+
+export { ModelWrapper } from "./ModelWrapper";

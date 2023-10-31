@@ -2,6 +2,8 @@ import { ModeType } from "./types";
 
 export const CONTROLS_LEVA = {
    Colors: "Colors",
+   Clear: "Clear",
+   Panel: "Panel (show/hide)",
    Auto_rotate: "Auto rotate",
    Directional_Light: "Directional Light",
    Directional_Light_2: "Directional Light 2",

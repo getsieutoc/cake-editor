@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useShowHide } from "@/globalStates";
 import {
    Box,
    Icon,
@@ -12,7 +12,8 @@ import {
 } from "@/components";
 
 export function ShortCutOverlay() {
-   const [show, setShow] = useState(true);
+   const { showHelper, setShowHelper } = useShowHide();
+
    return (
       <Box
          color="white"
@@ -28,12 +29,12 @@ export function ShortCutOverlay() {
                <Icon
                   boxSize={6}
                   cursor="pointer"
-                  onClick={() => setShow(!show)}
-                  as={show ? BiShowAlt : BiHide}
+                  onClick={() => setShowHelper(!showHelper)}
+                  as={showHelper ? BiShowAlt : BiHide}
                />
             </Box>
          </HStack>
-         {show && (
+         {showHelper && (
             <Box>
                <HStack paddingX={1} spacing={1}>
                   <Icon as={AiOutlineArrowUp} />

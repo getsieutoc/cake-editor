@@ -12,6 +12,7 @@ export type {
 } from "@react-three/fiber";
 export type ModelType = {
    name?: string;
+   thumbnail?: string;
    path: string;
    position?: [number, number, number];
    scale?: [number, number, number];
