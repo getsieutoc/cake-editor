@@ -95,3 +95,42 @@ export const useListModel = create<SelectItemTypes>()(
       }
    )
 );
+
+type Position2D = { x: number; y: number };
+type ContextMenuPositionType = {
+   position: Position2D;
+   setPosition: (
+      pos: Position2D,
+      group?: THREE.Group<THREE.Object3DEventMap> | null
+   ) => void;
+   group?: THREE.Group<THREE.Object3DEventMap> | null;
+   reset: () => void;
+};
+export const useContextMenuPosition = create<ContextMenuPositionType>()(
+   (set) => ({
+      position: {
+         x: 0,
+         y: 0,
+      },
+      setPosition: (
+         pos: Position2D,
+         group?: THREE.Group<THREE.Object3DEventMap> | null
+      ) => {
+         set((state) => ({
+            ...state,
+            group,
+            position: { ...pos },
+         }));
+      },
+
+      reset: () => {
+         set((state) => ({
+            ...state,
+            position: {
+               x: 0,
+               y: 0,
+            },
+         }));
+      },
+   })
+);

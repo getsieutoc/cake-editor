@@ -1,14 +1,13 @@
 import { useMemo, useRef, useState } from "react";
-import { v4 as uuidV4 } from "uuid";
 import { Box, Html, type ThreeEvent } from "@/components";
 import { useCursor, useGLTF, useFrame } from "@/hooks";
-import { GroupProps, PrimitiveProps, THREE_MESH } from "@/utils/types";
+import { GroupProps, PrimitiveProps, THREE_MESH, GLTF } from "@/utils/types";
 import {
    SHORT_CUTS,
    __GROUP_MODEL__,
    __PRIMITIVE_MODEL__,
 } from "@/utils/constants";
-import { useControlModel } from "@/globalStates";
+import { useContextMenuPosition, useControlModel } from "@/globalStates";
 import { getGroupObjectSelected } from "@/utils/service";
 
 type ModelType = GroupProps & {
@@ -29,13 +28,15 @@ export function Model(props: ModelType) {
       keyMap,
       ...rest
    } = props;
-   const { scene } = useGLTF(path);
+   const gltf: GLTF = useGLTF(path);
+   const modelRef = useRef<THREE.Group>(null);
    const [hovered, setHovered] = useState(false);
    const { selectedModel, setModel, resetSelectedModel } = useControlModel();
+   const posContextMenu = useContextMenuPosition();
    const primitiveRef = useRef<PrimitiveProps>(null);
    useCursor(hovered);
 
-   useFrame((__, delta) => {
+   useFrame((state, delta) => {
       const isDragByKey =
          primitiveRef?.current?.uuid === selectedModel?.parentId;
 
@@ -72,7 +73,7 @@ export function Model(props: ModelType) {
    });
    const annotations = useMemo(() => {
       const temp: JSX.Element[] = [];
-      scene?.traverse((o) => {
+      gltf.scene?.traverse((o) => {
          if (o?.userData?.prop) {
             temp.push(
                <Html
@@ -109,19 +110,22 @@ export function Model(props: ModelType) {
          }
       });
       return temp;
-   }, [scene]);
+   }, [gltf.scene]);
    const handleRemove = () => {
       let children_to_remove: THREE.Object3D<THREE.Object3DEventMap>[] = [];
-      scene.traverse(function (child) {
-         if (child.name === __PRIMITIVE_MODEL__) {
-            children_to_remove = [...children_to_remove, ...child.children];
-         }
-      });
-      children_to_remove.forEach(function (child) {
-         scene.remove(child);
-      });
+      console.log("modelRef.current :>> ", modelRef.current);
+      // modelRef.current?.traverse(function (child) {
+      //    console.log("child :>> ", child);
+      //    if (child.uuid === selectedModel.id) {
+      //       children_to_remove = [...children_to_remove, ...child.children];
+      //    }
+      // });
+      // children_to_remove.forEach(function (child) {
+      //    modelRef.current?.remove(child);
+      // });
       resetSelectedModel();
    };
+
    const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
 
@@ -143,39 +147,38 @@ export function Model(props: ModelType) {
       e.type === "dblclick" && resetSelectedModel();
    };
    const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
-      console.log("right click :>> ", e);
-      // if (selectedModel.name === e.object.name) {
-      //    e.stopPropagation();
-      //    setModel({
-      //       ...selectedModel,
-      //       mode: ((selectedModel?.mode ?? 0) + 1) % modes.length,
-      //    });
-      // }
+      e.stopPropagation();
+      // console.log("right click :>> ", e);
+      if (selectedModel.id === e.object.uuid) {
+         posContextMenu.setPosition({ x: e.x, y: e.y }, modelRef.current);
+      }
    };
    return (
       <group
+         ref={modelRef}
          castShadow
          receiveShadow
          name={__GROUP_MODEL__}
          onClick={handleClickModel}
          onPointerMissed={handlePointerMissed}
          onContextMenu={handleContextMenu}
+         dispose={null}
          {...rest}
       >
          <primitive
             name={__PRIMITIVE_MODEL__}
             ref={primitiveRef}
-            object={scene}
+            object={gltf.scene}
             scale={scale}
             rotation={rotation}
             position={position}
-            castShadow
-            receiveShadow
             onPointerOver={(e: ThreeEvent<PointerEvent>) => {
                e.stopPropagation();
                setHovered(true);
             }}
             onPointerOut={() => setHovered(false)}
+            castShadow
+            receiveShadow
          >
             {annotations}
          </primitive>

@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { OrbitControls, TransformControls } from "@/components";
-import { useThree } from "@/hooks";
 import { useControlModel } from "@/globalStates";
 import { modes } from "@/utils/constants";
 import { getGroupObjectSelected } from "@/utils/service";
@@ -12,9 +11,7 @@ export function Controls(props: ControlType) {
    const { autoRotate = false } = props;
    const { selectedModel } = useControlModel();
    const transformControlsRef = useRef(null);
-   const scene = useThree((state) => state.scene);
-   const objectSelected = scene.getObjectByName(selectedModel.name ?? "");
-   const groupObject = getGroupObjectSelected(objectSelected);
+   const groupObject = getGroupObjectSelected(selectedModel.object);
 
    useEffect(() => {
       if (selectedModel.id && transformControlsRef.current && groupObject) {
@@ -29,7 +26,7 @@ export function Controls(props: ControlType) {
          {selectedModel.id && (
             <TransformControls
                ref={transformControlsRef}
-               object={objectSelected}
+               object={selectedModel.object}
                mode={modes[selectedModel?.mode ?? 0]}
                size={0.5}
             />

@@ -7,6 +7,10 @@ export {
    CardHeader,
    Box,
    Button,
+   Menu,
+   MenuButton,
+   MenuList,
+   MenuItem,
    Heading,
    HStack,
    Spinner,
@@ -47,3 +51,4 @@ export * from "./Editor";
 export * from "./Controls";
 export * from "./ColorPicker";
 export * from "./DataList";
+export * from "./ContextMenu";

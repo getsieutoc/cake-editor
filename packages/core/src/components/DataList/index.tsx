@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { Box, Input, HStack, Button } from "@/components";
 import { ModelType } from "@/utils/types";
 import { Item } from "./Item";
-import { useListModel, useShowHide } from "@/globalStates";
+import { useShowHide, useListModel } from "@/globalStates";
 import { fuzzySearch } from "@/utils/service";
 
 type DataListTypes = {
@@ -40,7 +40,9 @@ export const DataList = (props: DataListTypes) => {
             </Box>
             <Box>
                <Button
-                  onClick={() => setShowListModel(!showListModel)}
+                  onClick={() => {
+                     setShowListModel(!showListModel);
+                  }}
                   variant="outline"
                   rounded={3}
                   size={size}
@@ -50,7 +52,7 @@ export const DataList = (props: DataListTypes) => {
             </Box>
          </HStack>
 
-         {modelList.length && (
+         {showListModel && (
             <VirtuosoGrid
                style={{ height: 400 }}
                totalCount={modelList.length}
@@ -67,7 +69,17 @@ export const DataList = (props: DataListTypes) => {
                }}
                itemContent={(index, item) => (
                   <Item
-                     onClick={() => setListItem(item)}
+                     onClick={() => {
+                        if (!item.isSelected) {
+                           item.isSelected = true;
+                           const newItem = { ...item };
+                           const x = -1;
+                           const y = 1.5;
+                           const z = 0;
+                           newItem.position = [x, y, z];
+                           setListItem(newItem);
+                        }
+                     }}
                      index={index}
                      item={item}
                   />

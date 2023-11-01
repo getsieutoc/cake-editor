@@ -1,3 +1,5 @@
+export type { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+
 export type {
    OrbitControlsProps,
    TransformControlsProps,
@@ -17,6 +19,7 @@ export type ModelType = {
    position?: [number, number, number];
    scale?: [number, number, number];
    rotation?: [number, number, number];
+   isSelected?: boolean;
 };
 export type THREE_MESH = THREE.Mesh & {
    material: {

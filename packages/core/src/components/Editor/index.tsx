@@ -3,6 +3,7 @@ import {
    Box,
    Leva,
    THREE,
+   button,
    HStack,
    Lights,
    Canvas,
@@ -10,6 +11,7 @@ import {
    Crystals,
    Progress,
    Controls,
+   ContextMenu,
    ColorPicker,
    Environment,
    GizmoHelper,
@@ -21,7 +23,7 @@ import {
 import { useProgress, useControls } from "@/hooks";
 import { CONTROLS_LEVA } from "@/utils/constants";
 import { ModelType } from "@/utils/types";
-import { useControlModel, useShowHide } from "@/globalStates";
+import { useControlModel, useListModel, useShowHide } from "@/globalStates";
 
 type CakeEditorType = {
    background?: string;
@@ -32,10 +34,19 @@ export function CakeEditor(props: CakeEditorType) {
    const { background = "", models, positionPanel = { x: 0, y: 0 } } = props;
    const [height, setHeight] = useState(400);
    const { progress } = useProgress();
-   const { selectedModel } = useControlModel();
+   const { selectedModel, resetSelectedModel } = useControlModel();
    const { showPanelLeva, setShowPanelLeva, autoRotate, setAutoRotate } =
       useShowHide();
+   const { clearList } = useListModel();
 
+   //## Start add to panel leva
+   useControls({
+      "Clean Up": button(() => {
+         clearList();
+         resetSelectedModel();
+         models.map((o) => (o.isSelected = false));
+      }),
+   });
    useControls(CONTROLS_LEVA.Auto_rotate, {
       "start/stop": {
          value: autoRotate,
@@ -52,7 +63,7 @@ export function CakeEditor(props: CakeEditorType) {
       },
       { collapsed: true }
    );
-
+   //## End add to panel leva
    useEffect(() => {
       setHeight(window.innerHeight * 0.9);
    }, []);
@@ -116,7 +127,7 @@ export function CakeEditor(props: CakeEditorType) {
                <Controls autoRotate={autoRotate} />
             </Canvas>
          </Suspense>
-
+         <ContextMenu />
          <Leva
             collapsed={!showPanelLeva}
             titleBar={{

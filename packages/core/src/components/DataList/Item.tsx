@@ -10,6 +10,7 @@ export const Item = (props: ItemTypes) => {
 
    return (
       <Box
+         userSelect="none"
          cursor="pointer"
          _hover={{
             border: "1px solid black",
