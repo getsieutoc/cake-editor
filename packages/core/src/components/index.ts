@@ -7,6 +7,7 @@ export {
    CardHeader,
    Box,
    Button,
+   Checkbox,
    Menu,
    MenuButton,
    MenuList,
@@ -19,9 +20,16 @@ export {
    Input,
    Image,
    Text,
+   Textarea,
    Tooltip,
+   Select as SelectChakra,
    Wrap,
    WrapItem,
+   Popover,
+   PopoverBody,
+   PopoverContent,
+   PopoverTrigger,
+   FormLabel,
 } from "@chakra-ui/react";
 export { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 export {
@@ -29,8 +37,10 @@ export {
    Edges,
    Stats,
    Html,
+   Text3D,
    Sphere,
    Merged,
+   Center,
    Select,
    Outlines,
    Environment,
@@ -52,3 +62,4 @@ export * from "./Controls";
 export * from "./ColorPicker";
 export * from "./DataList";
 export * from "./ContextMenu";
+export * from "./Text3D";

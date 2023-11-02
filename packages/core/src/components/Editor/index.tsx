@@ -11,6 +11,7 @@ import {
    Crystals,
    Progress,
    Controls,
+   Add3DText,
    ContextMenu,
    ColorPicker,
    Environment,
@@ -23,7 +24,13 @@ import {
 import { useProgress, useControls } from "@/hooks";
 import { CONTROLS_LEVA } from "@/utils/constants";
 import { ModelType } from "@/utils/types";
-import { useControlModel, useListModel, useShowHide } from "@/globalStates";
+import {
+   useContextMenuPosition,
+   useControlModel,
+   useListModel,
+   useShowHide,
+   useText3DList,
+} from "@/globalStates";
 
 type CakeEditorType = {
    background?: string;
@@ -38,12 +45,14 @@ export function CakeEditor(props: CakeEditorType) {
    const { showPanelLeva, setShowPanelLeva, autoRotate, setAutoRotate } =
       useShowHide();
    const { clearList } = useListModel();
-
+   const posContextMenu = useContextMenuPosition();
+   const { reset: reset3DText } = useText3DList();
    //## Start add to panel leva
    useControls({
       "Clean Up": button(() => {
          clearList();
          resetSelectedModel();
+         reset3DText();
          models.map((o) => (o.isSelected = false));
       }),
    });
@@ -104,7 +113,15 @@ export function CakeEditor(props: CakeEditorType) {
                </Box>
             }
          >
-            <Canvas camera={{ position: [0, 3, 5], fov: 60 }} shadows>
+            <Canvas
+               camera={{ position: [0, 3, 5], fov: 60 }}
+               shadows
+               onContextMenu={(e) => {
+                  if (!selectedModel.id) {
+                     posContextMenu.setPosition({ x: e.clientX, y: e.clientY });
+                  }
+               }}
+            >
                <Environment
                   background
                   files={background}
@@ -128,6 +145,7 @@ export function CakeEditor(props: CakeEditorType) {
             </Canvas>
          </Suspense>
          <ContextMenu />
+         <Add3DText />
          <Leva
             collapsed={!showPanelLeva}
             titleBar={{

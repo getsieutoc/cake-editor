@@ -1,3 +1,4 @@
+export { useBoolean } from "@chakra-ui/react";
 export * from "./use-keyboard";
 export {
    useFrame,

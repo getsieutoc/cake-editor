@@ -141,3 +141,48 @@ export const useContextMenuPosition = create<ContextMenuPositionType>()(
       },
    })
 );
+
+export type ItemText3DType = {
+   content: string;
+   color?: string | number;
+   font: string;
+   position?: [number, number, number];
+   scale?: [number, number, number];
+   size?: number;
+   curveSegments?: number;
+   bevelEnabled?: boolean;
+   bevelSize?: number;
+   bevelThickness?: number;
+   height?: number;
+   lineHeight?: number;
+   letterSpacing?: number;
+};
+export type Text3DListType = {
+   openData: Position2D;
+   setOpen: (pos: Position2D) => void;
+   textList: ItemText3DType[];
+   setTextList: (list: ItemText3DType[]) => void;
+   reset: () => void;
+};
+export const useText3DList = create<Text3DListType>()(
+   persist(
+      (set, get) => ({
+         textList: [],
+         setTextList: (list: ItemText3DType[]) =>
+            set((state) => ({ ...state, textList: [...list] })),
+         openData: { x: 0, y: 0 },
+         setOpen: (pos: Position2D) =>
+            set((state) => ({ ...state, openData: { ...pos } })),
+         reset: () =>
+            set((state) => ({
+               ...state,
+               openData: { x: 0, y: 0 },
+               textList: [],
+            })),
+      }),
+      {
+         name: "text-3d-list",
+         storage: createJSONStorage(() => localStorage),
+      }
+   )
+);

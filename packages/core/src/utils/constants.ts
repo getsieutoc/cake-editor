@@ -23,3 +23,13 @@ export const SHORT_CUTS = {
    KeyD: "KeyD",
    KeyC: "KeyC",
 };
+export const fonts = [
+   {
+      path: "/fonts/SVN-Franko.json",
+      name: "SVN Franko",
+   },
+   {
+      path: "/fonts/gt.json",
+      name: "GT",
+   },
+];

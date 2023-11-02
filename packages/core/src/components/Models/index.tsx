@@ -122,7 +122,6 @@ export function Model(props: ModelType) {
    };
    const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
-      // console.log("right click :>> ", e);
       if (selectedModel.id === e.object.id) {
          posContextMenu.setPosition({ x: e.x, y: e.y }, modelRef.current);
       }
