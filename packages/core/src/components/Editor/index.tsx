@@ -118,7 +118,7 @@ export function CakeEditor(props: CakeEditorType) {
 
                <ContactShadows
                   scale={80}
-                  position={[0.13, -0.33, 0.33]}
+                  position={[0.1, 0, 0.1]}
                   opacity={1}
                />
                <GizmoHelper alignment="bottom-right" margin={[100, 100]}>

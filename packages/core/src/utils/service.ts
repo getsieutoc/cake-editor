@@ -1,28 +1,20 @@
 import { __GROUP_MODEL__, __PRIMITIVE_MODEL__ } from "./constants";
-import { ModelType } from "./types";
+import { ModelType, THREE_MESH } from "./types";
 
 export const getGroupObjectSelected = (
    obj:
-      | THREE.Mesh
+      | THREE_MESH
       | THREE.Group
       | THREE.Object3D<THREE.Object3DEventMap>
       | undefined
 ):
-   | THREE.Mesh
+   | THREE_MESH
    | THREE.Group
    | THREE.Object3D<THREE.Object3DEventMap>
    | undefined => {
    if (!obj) return undefined;
-   // case for root object (__PRIMITIVE_MODEL__)
-   // case for object copied (__GROUP_MODEL__)
-   else if (
-      obj?.name === __PRIMITIVE_MODEL__ ||
-      obj?.name === __GROUP_MODEL__
-   ) {
-      return obj;
-   } else {
-      return getGroupObjectSelected(obj?.parent as THREE.Group);
-   }
+   if (!obj.parent) return obj;
+   return obj.parent;
 };
 
 function levenshteinDistance(a: string, b: string) {

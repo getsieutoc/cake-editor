@@ -64,50 +64,52 @@ export function Model(props: ModelType) {
             });
       }
    });
-   const annotations = useMemo(() => {
-      const temp: JSX.Element[] = [];
-      gltf.scene?.traverse((o) => {
-         if (o?.userData?.prop) {
-            temp.push(
-               <Html
-                  key={o.uuid}
-                  position={[o.position.x, o.position.y, o.position.z]}
-                  distanceFactor={3}
-               >
-                  <Box
-                     fontSize="20px"
-                     width="max-content"
-                     maxW="500px"
-                     transform="translate3d(calc(15%), calc(-50%), 0)"
-                     textAlign="left"
-                     userSelect="none"
-                     fontFamily="var(--leva-fonts-mono)"
-                     background="black"
-                     color="white"
-                     rounded={10}
-                     paddingX={10}
-                     _before={{
-                        content: `""`,
-                        position: "absolute",
-                        top: "20px",
-                        left: "-30px",
-                        height: "1px",
-                        width: "30px",
-                        background: "black",
-                     }}
-                  >
-                     {o.userData.prop}
-                  </Box>
-               </Html>
-            );
-         }
-      });
-      return temp;
-   }, [gltf.scene]);
+   // const annotations = useMemo(() => {
+   //    const temp: JSX.Element[] = [];
+   //    gltf.scene?.traverse((o) => {
+   //       if (o?.userData?.prop) {
+   //          temp.push(
+   //             <Html
+   //                key={o.uuid}
+   //                position={[o.position.x, o.position.y, o.position.z]}
+   //                distanceFactor={3}
+   //             >
+   //                <Box
+   //                   fontSize="20px"
+   //                   width="max-content"
+   //                   maxW="500px"
+   //                   transform="translate3d(calc(15%), calc(-50%), 0)"
+   //                   textAlign="left"
+   //                   userSelect="none"
+   //                   fontFamily="var(--leva-fonts-mono)"
+   //                   background="black"
+   //                   color="white"
+   //                   rounded={10}
+   //                   paddingX={10}
+   //                   _before={{
+   //                      content: `""`,
+   //                      position: "absolute",
+   //                      top: "20px",
+   //                      left: "-30px",
+   //                      height: "1px",
+   //                      width: "30px",
+   //                      background: "black",
+   //                   }}
+   //                >
+   //                   {o.userData.prop}
+   //                </Box>
+   //             </Html>
+   //          );
+   //       }
+   //    });
+   //    return temp;
+   // }, [gltf.scene]);
    const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
 
       const obj = e.object as THREE_MESH;
+      obj.castShadow = true;
+      obj.receiveShadow = true;
       setModel({
          id: obj.id,
          parentId: obj.parent?.id,
@@ -153,7 +155,7 @@ export function Model(props: ModelType) {
             castShadow
             receiveShadow
          >
-            {annotations}
+            {/* {annotations} */}
          </primitive>
       </group>
    );
