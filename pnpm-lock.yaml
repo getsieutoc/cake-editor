@@ -219,6 +219,9 @@ importers:
       leva:
         specifier: 0.9.35
         version: 0.9.35(@types/react-dom@18.2.14)(@types/react@18.2.31)(react-dom@18.2.0)(react@18.2.0)
+      lodash:
+        specifier: 4.17.21
+        version: 4.17.21
       react-icons:
         specifier: 4.11.0
         version: 4.11.0(react@18.2.0)
@@ -238,6 +241,9 @@ importers:
       '@sieutoc/tsconfig':
         specifier: workspace:*
         version: link:../sieutoc-tsconfig
+      '@types/lodash':
+        specifier: 4.14.200
+        version: 4.14.200
       '@types/node':
         specifier: 20.8.7
         version: 20.8.7

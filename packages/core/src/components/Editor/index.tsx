@@ -70,7 +70,7 @@ export function CakeEditor(props: CakeEditorType) {
 
    return (
       <Box width="100%" height={height}>
-         {/* ---Helper--- */}
+         {/* ---Helper and List models--- */}
          <HStack position="absolute" spacing={1} zIndex={1}>
             <Box position="relative" height="130px">
                <ShortCutOverlay />

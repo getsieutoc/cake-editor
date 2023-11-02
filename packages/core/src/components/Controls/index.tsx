@@ -1,31 +1,27 @@
 import { useEffect, useRef } from "react";
 import { OrbitControls, TransformControls } from "@/components";
+import { TransformControlsProps } from "@/utils/types";
 import { useControlModel } from "@/globalStates";
 import { modes } from "@/utils/constants";
-import { getGroupObjectSelected } from "@/utils/service";
 
 type ControlType = {
    autoRotate?: boolean;
 };
 export function Controls(props: ControlType) {
    const { autoRotate = false } = props;
-   const { selectedModel } = useControlModel();
-   const transformControlsRef = useRef(null);
-   const groupObject = getGroupObjectSelected(selectedModel.object);
+   const { selectedModel, setTransformControlsRef } = useControlModel();
+   const transformControlsRef = useRef<TransformControlsProps>(null!);
 
    useEffect(() => {
-      if (selectedModel.id && transformControlsRef.current && groupObject) {
-         const transformControls =
-            transformControlsRef.current as THREE.Object3D;
-         transformControls.attach(groupObject);
+      if (transformControlsRef.current) {
+         setTransformControlsRef(transformControlsRef.current);
       }
    }, [selectedModel.id]);
-
    return (
       <>
          {selectedModel.id && (
             <TransformControls
-               ref={transformControlsRef}
+               ref={transformControlsRef as any}
                object={selectedModel.object}
                mode={modes[selectedModel?.mode ?? 0]}
                size={0.5}

@@ -1,19 +1,13 @@
 import { useEffect, useState } from "react";
-import {
-   Box,
-   Menu,
-   MenuButton,
-   Button,
-   MenuList,
-   MenuItem,
-} from "@/components";
+import { Box, Menu, MenuList, MenuItem } from "@/components";
 import { useContextMenuPosition, useControlModel } from "@/globalStates";
 
 type ContextMenuTypes = {};
 export const ContextMenu = (props: ContextMenuTypes) => {
    const { position, group } = useContextMenuPosition();
    const [show, setShow] = useState(false);
-   const { selectedModel } = useControlModel();
+   const { selectedModel, resetSelectedModel, transformControlsRef } =
+      useControlModel();
 
    useEffect(() => {
       if (position.x + position.y > 0) {
@@ -34,12 +28,19 @@ export const ContextMenu = (props: ContextMenuTypes) => {
          group?.add(clonedModel); // Add the cloned model to the scene
       }
    };
+   const handleRemove = () => {
+      transformControlsRef &&
+         transformControlsRef.detach &&
+         transformControlsRef.detach();
+      selectedModel.object?.parent?.remove(selectedModel.object);
+      resetSelectedModel();
+   };
    return (
       <Box position="absolute" top={position.y} left={position.x}>
          <Menu isOpen={show} onClose={() => setShow(false)} isLazy>
             <MenuList fontSize={12} p={0}>
                <MenuItem onClick={handleCopy}>Duplicate</MenuItem>
-               <MenuItem>Delete</MenuItem>
+               <MenuItem onClick={handleRemove}>Delete</MenuItem>
             </MenuList>
          </Menu>
       </Box>

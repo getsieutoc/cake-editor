@@ -1,5 +1,6 @@
 import { ComponentType, useMemo, useState } from "react";
 import { GridListProps, VirtuosoGrid } from "react-virtuoso";
+import _ from "lodash";
 import styled from "@emotion/styled";
 import { Box, Input, HStack, Button } from "@/components";
 import { ModelType } from "@/utils/types";
@@ -14,7 +15,8 @@ type DataListTypes = {
 export const DataList = (props: DataListTypes) => {
    const { data, size = "xs" } = props;
    const { showListModel, setShowListModel } = useShowHide();
-   const { setListItem } = useListModel();
+   const { listItem, setListItem } = useListModel();
+
    const [text, setText] = useState("");
 
    const modelList = useMemo(() => {
@@ -25,6 +27,19 @@ export const DataList = (props: DataListTypes) => {
       }
       return [];
    }, [data, text]);
+
+   const handleSelect = (item: ModelType) => {
+      const newItem = _.cloneDeep(item);
+      newItem.isSelected = true;
+      const x = -1;
+      const y = 1.5;
+      const z = 0;
+      newItem.position = [x, y, z];
+      const listWithoutItem = listItem.filter((o) => o.name !== newItem.name);
+      const temp = _.cloneDeep(listWithoutItem);
+      temp.push(newItem);
+      setListItem(temp);
+   };
    return (
       <Box>
          <HStack spacing={1}>
@@ -69,17 +84,7 @@ export const DataList = (props: DataListTypes) => {
                }}
                itemContent={(index, item) => (
                   <Item
-                     onClick={() => {
-                        if (!item.isSelected) {
-                           item.isSelected = true;
-                           const newItem = { ...item };
-                           const x = -1;
-                           const y = 1.5;
-                           const z = 0;
-                           newItem.position = [x, y, z];
-                           setListItem(newItem);
-                        }
-                     }}
+                     onClick={() => handleSelect(item)}
                      index={index}
                      item={item}
                   />

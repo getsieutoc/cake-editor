@@ -1,5 +1,5 @@
 import { __GROUP_MODEL__, __PRIMITIVE_MODEL__ } from "./constants";
-import { ModeType, ModelType } from "./types";
+import { ModelType } from "./types";
 
 export const getGroupObjectSelected = (
    obj:
@@ -13,7 +13,12 @@ export const getGroupObjectSelected = (
    | THREE.Object3D<THREE.Object3DEventMap>
    | undefined => {
    if (!obj) return undefined;
-   if (obj?.name === __PRIMITIVE_MODEL__) {
+   // case for root object (__PRIMITIVE_MODEL__)
+   // case for object copied (__GROUP_MODEL__)
+   else if (
+      obj?.name === __PRIMITIVE_MODEL__ ||
+      obj?.name === __GROUP_MODEL__
+   ) {
       return obj;
    } else {
       return getGroupObjectSelected(obj?.parent as THREE.Group);

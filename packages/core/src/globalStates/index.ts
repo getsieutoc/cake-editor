@@ -1,21 +1,27 @@
 import { persist, createJSONStorage } from "zustand/middleware";
 import { create } from "zustand";
-import { ModelType, THREE_MESH } from "@/utils/types";
+import { ModelType, THREE_MESH, TransformControlsProps } from "@/utils/types";
 
 type SelectedModelType = {
-   id: string | null;
-   parentId?: string | null;
+   id: number | null;
+   parentId?: number | null;
    object?: THREE_MESH;
    name?: string;
    mode?: number;
 };
 type ControlModelTye = {
+   transformControlsRef?: TransformControlsProps | null;
+   setTransformControlsRef: (trans: TransformControlsProps | null) => void;
    selectedModel: SelectedModelType;
    setModel: (val: SelectedModelType) => void;
    resetSelectedModel: () => void;
 };
 
 export const useControlModel = create<ControlModelTye>()((set) => ({
+   transformControlsRef: null,
+   setTransformControlsRef: (trans) => {
+      set((state) => ({ ...state, transformControlsRef: trans }));
+   },
    selectedModel: {
       id: null,
       parentId: null,
@@ -32,6 +38,7 @@ export const useControlModel = create<ControlModelTye>()((set) => ({
    resetSelectedModel: () => {
       set((state) => ({
          ...state,
+         transformControlsRef: null,
          selectedModel: {
             id: null,
             object: undefined,
@@ -78,15 +85,15 @@ export const useShowHide = create<ShowHideTypes>()(
 
 type SelectItemTypes = {
    listItem: ModelType[];
-   setListItem: (val: ModelType) => void;
+   setListItem: (val: ModelType[]) => void;
    clearList: () => void;
 };
 export const useListModel = create<SelectItemTypes>()(
    persist(
       (set, get) => ({
          listItem: [],
-         setListItem: (val: ModelType) =>
-            set((state) => ({ ...state, listItem: [...state.listItem, val] })),
+         setListItem: (list: ModelType[]) =>
+            set((state) => ({ ...state, listItem: [...list] })),
          clearList: () => set((state) => ({ ...state, listItem: [] })),
       }),
       {
