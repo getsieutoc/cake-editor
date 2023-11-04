@@ -92,11 +92,13 @@ export function CakeEditor(props: CakeEditorType) {
             <Box position="relative" height="130px">
                {selectedModel.id && (
                   <ColorPicker
-                     width={20}
+                     width="200px"
                      position="absolute"
                      fontWeight={600}
                      fontSize={11}
-                     name={selectedModel.name}
+                     name={
+                        selectedModel.displayName + " - " + selectedModel.name
+                     }
                      defaultValue={selectedModel.object?.material?.color?.getHexString()}
                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
                         if (selectedModel.object) {

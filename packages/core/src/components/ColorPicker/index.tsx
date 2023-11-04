@@ -17,6 +17,7 @@ export const ColorPicker = (props: ColorPickerTypes) => {
          <Input
             m={0}
             p={0}
+            height="30px"
             type="color"
             rounded={0}
             onChange={rest.onChange}

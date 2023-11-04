@@ -1,4 +1,5 @@
-export type { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { GLTF } from "three-stdlib";
+export type { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export type {
    OrbitControlsProps,
@@ -12,7 +13,12 @@ export type {
    GroupProps,
    PrimitiveProps,
 } from "@react-three/fiber";
+export type DreiGLTF = GLTF & {
+   nodes: Record<string, THREE.Mesh>;
+   materials: Record<string, THREE.MeshStandardMaterial>;
+};
 export type ModelType = {
+   id: string;
    name?: string;
    thumbnail?: string;
    path: string;
@@ -27,3 +33,9 @@ export type THREE_MESH = THREE.Mesh & {
    geometry?: any;
 };
 export type ModeType = "translate" | "rotate" | "scale";
+export type AnnotationType = {
+   id: string;
+   idModel: string;
+   content: string;
+   position: { x: number; y: number; z: number };
+};

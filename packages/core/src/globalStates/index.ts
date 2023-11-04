@@ -7,6 +7,7 @@ type SelectedModelType = {
    parentId?: number | null;
    object?: THREE_MESH;
    name?: string;
+   displayName?: string;
    mode?: number;
 };
 type ControlModelTye = {
@@ -15,6 +16,8 @@ type ControlModelTye = {
    selectedModel: SelectedModelType;
    setModel: (val: SelectedModelType) => void;
    resetSelectedModel: () => void;
+   enableOrbitControl: boolean;
+   setEnableOrbitControl: (val: boolean) => void;
 };
 
 export const useControlModel = create<ControlModelTye>()((set) => ({
@@ -26,6 +29,7 @@ export const useControlModel = create<ControlModelTye>()((set) => ({
       id: null,
       parentId: null,
       name: "",
+      displayName: "",
       mode: 0,
       object: undefined,
    },
@@ -43,9 +47,17 @@ export const useControlModel = create<ControlModelTye>()((set) => ({
             id: null,
             object: undefined,
             parentId: null,
+            displayName: "",
             name: "",
             mode: 0,
          },
+      }));
+   },
+   enableOrbitControl: true,
+   setEnableOrbitControl: (val: boolean) => {
+      set((state) => ({
+         ...state,
+         enableOrbitControl: val,
       }));
    },
 }));

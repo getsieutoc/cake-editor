@@ -1,11 +1,17 @@
 'use client';
 import dynamic from 'next/dynamic';
+import { Spinner, Box } from '@/components/chakra';
 import { Locale } from '@/types';
 import { Editor } from '@sieutoc/cake-editor';
 import { models } from './data';
 const CakeEditorSSR = dynamic(() => Promise.resolve(Editor), {
   ssr: false,
-  loading: () => <p>Loading...</p>,
+  loading: () => (
+    <Box>
+      loading...
+      <Spinner size="xs" />
+    </Box>
+  ),
 });
 
 export default async function HomePage({

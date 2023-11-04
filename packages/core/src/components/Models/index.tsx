@@ -1,16 +1,21 @@
-import { useRef, useMemo, ReactNode } from "react";
-import { Html, Box } from "@/components";
-import { useGLTF, useDrag, useFrame } from "@/hooks";
+import { useRef, useMemo, useState } from "react";
+import { THREE } from "@/components";
+import { useGLTF, useDrag } from "@/hooks";
 import {
    GroupProps,
    PrimitiveProps,
    THREE_MESH,
-   GLTF,
+   DreiGLTF,
    ThreeEvent,
    ModelType,
 } from "@/utils/types";
-import { __GROUP_MODEL__, __PRIMITIVE_MODEL__ } from "@/utils/constants";
+import {
+   __GROUP_MODEL__,
+   __PRIMITIVE_MODEL__,
+   __SELECTED__,
+} from "@/utils/constants";
 import { useContextMenuPosition, useControlModel } from "@/globalStates";
+import { Annotation } from "./Annotation";
 
 type ModelTypes = GroupProps & {
    path: string;
@@ -30,12 +35,58 @@ export function Model(props: ModelTypes) {
       modelDetail,
       ...rest
    } = props;
-   const gltf: GLTF = useGLTF(path);
+   const gltf = useGLTF(path) as DreiGLTF;
    const modelRef = useRef<THREE.Group>(null);
    const primitiveRef = useRef<PrimitiveProps>(null);
-   const textRef = useRef<any>(null);
    const { selectedModel, setModel, resetSelectedModel } = useControlModel();
    const posContextMenu = useContextMenuPosition();
+   const [pos2d, setPos2d] = useState({ x: 0, y: 0 });
+
+   const annotations = useMemo(() => {
+      if (modelDetail.annotations?.length) {
+         modelDetail.annotations.forEach((ann, i) => {
+            const position = { x: 0, y: 0, z: 0 };
+
+            gltf.scene?.children.forEach(
+               (chil: THREE.Object3D<THREE.Object3DEventMap>) => {
+                  const isObject =
+                     chil.name !== __PRIMITIVE_MODEL__ &&
+                     chil.name !== __GROUP_MODEL__ &&
+                     chil.type === "Mesh";
+                  if (isObject) {
+                     position.x = chil.position.x;
+                     position.y = chil.position.y;
+                     position.z = chil.position.z;
+                     return;
+                  }
+               }
+            );
+            // store to scene for backup in local
+            gltf.scene.userData = {
+               ...gltf.scene.userData,
+               [`${i}`]: {
+                  id: `${i}`,
+                  idModel: modelDetail.id,
+                  content: ann,
+                  position,
+               },
+            };
+         });
+
+         const anns = gltf.scene.userData;
+         return Object.keys(anns).map((key, idx) => {
+            return (
+               <Annotation
+                  key={idx}
+                  index={idx}
+                  annotation={anns[key]}
+                  scene={gltf.scene}
+               />
+            );
+         });
+      }
+      return [];
+   }, [pos2d.x, pos2d.y, modelDetail.annotations?.length]);
 
    const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
@@ -45,12 +96,15 @@ export function Model(props: ModelTypes) {
       setModel({
          id: obj.id,
          parentId: obj.parent?.id,
+         displayName: modelDetail.name,
          name: obj.name,
          object: obj,
       });
    };
    const handlePointerMissed = (e: MouseEvent) => {
-      e.type === "dblclick" && resetSelectedModel();
+      if (e.type === "dblclick") {
+         resetSelectedModel();
+      }
    };
    const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
@@ -60,14 +114,14 @@ export function Model(props: ModelTypes) {
    };
    const bind = useDrag(({ down, movement: [x, y] }) => {
       if (down) {
-         textRef.current.style.left = x + "px";
-         textRef.current.style.top = y + "px";
+         setPos2d({ x, y });
       }
    });
 
    return (
       <group
          ref={modelRef}
+         {...(bind() as GroupProps)}
          castShadow
          receiveShadow
          name={__GROUP_MODEL__}
@@ -78,7 +132,9 @@ export function Model(props: ModelTypes) {
             e.stopPropagation();
             document.body.style.cursor = "pointer";
          }}
-         onPointerOut={(e) => (document.body.style.cursor = "default")}
+         onPointerOut={(e) => {
+            document.body.style.cursor = "default";
+         }}
          dispose={null}
          {...rest}
       >
@@ -91,43 +147,12 @@ export function Model(props: ModelTypes) {
             position={position}
             castShadow
             receiveShadow
-            {...bind()}
          >
-            {modelDetail.annotations?.map((ann, idx) => {
-               return (
-                  <Html key={idx} distanceFactor={3} ref={textRef}>
-                     <Box
-                        pos="absolute"
-                        fontSize="20px"
-                        width="max-content"
-                        maxW="500px"
-                        transform="translate3d(calc(15%), calc(-50%), 0)"
-                        textAlign="left"
-                        userSelect="none"
-                        fontFamily="var(--leva-fonts-mono)"
-                        background="black"
-                        color="white"
-                        rounded={10}
-                        paddingX={10}
-                        opacity={0.5}
-                        _before={{
-                           content: `""`,
-                           position: "absolute",
-                           top: "20px",
-                           left: "-100px",
-                           height: "1px",
-                           width: "100px",
-                           background: "black",
-                        }}
-                     >
-                        {ann}
-                     </Box>
-                  </Html>
-               );
-            })}
+            {annotations}
          </primitive>
       </group>
    );
 }
 
 export { ModelWrapper } from "./ModelWrapper";
+export { Annotation } from "./Annotation";

@@ -139,6 +139,7 @@ export const Add3DText = () => {
                               size="xs"
                               rounded={5}
                               value={text.bevelThickness}
+                              isDisabled={!text.bevelEnabled}
                               onChange={(e) =>
                                  handleChange(
                                     "bevelThickness",
@@ -156,6 +157,7 @@ export const Add3DText = () => {
                               type="number"
                               size="xs"
                               rounded={5}
+                              isDisabled={!text.bevelEnabled}
                               value={text.bevelSize}
                               onChange={(e) =>
                                  handleChange(

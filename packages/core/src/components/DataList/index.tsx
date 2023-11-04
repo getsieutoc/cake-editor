@@ -45,6 +45,7 @@ export const DataList = (props: DataListTypes) => {
          <HStack spacing={1}>
             <Box w="100%">
                <Input
+                  onFocus={() => setShowListModel(true)}
                   placeholder="Search..."
                   _placeholder={{ color: "white" }}
                   size={size}

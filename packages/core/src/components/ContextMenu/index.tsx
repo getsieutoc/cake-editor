@@ -70,6 +70,12 @@ export const ContextMenu = (props: ContextMenuTypes) => {
                   Add text
                </MenuItem>
                <MenuItem
+                  // onClick={() => setOpenAdd3DText(position)}
+                  isDisabled={!selectedModel.id}
+               >
+                  Add label (Object selected)
+               </MenuItem>
+               <MenuItem
                   onClick={handleCopy}
                   isDisabled={isDisabledObjAnd3DText}
                >

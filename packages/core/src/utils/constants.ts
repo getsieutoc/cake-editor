@@ -16,6 +16,7 @@ export const __CRYSTAL__ = "__CRYSTAL__";
 export const __ContactShadows__ = "__ContactShadows__";
 export const __GizmoHelper__ = "__GizmoHelper__";
 export const __TransformControls__ = "__TransformControls__";
+export const __SELECTED__ = "__SELECTED__";
 
 export const modes: ModeType[] = ["translate", "rotate", "scale"];
 export const SHORT_CUTS = {

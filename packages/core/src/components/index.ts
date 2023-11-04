@@ -14,6 +14,7 @@ export {
    MenuItem,
    Heading,
    HStack,
+   VStack,
    Spinner,
    Progress,
    Icon,
@@ -63,3 +64,4 @@ export * from "./ColorPicker";
 export * from "./DataList";
 export * from "./ContextMenu";
 export * from "./Text3D";
+export * from "./Tooltip";

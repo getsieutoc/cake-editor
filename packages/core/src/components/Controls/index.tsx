@@ -9,7 +9,8 @@ type ControlType = {
 };
 export function Controls(props: ControlType) {
    const { autoRotate = false } = props;
-   const { selectedModel, setTransformControlsRef } = useControlModel();
+   const { selectedModel, setTransformControlsRef, enableOrbitControl } =
+      useControlModel();
    const transformControlsRef = useRef<TransformControlsProps>(null!);
 
    useEffect(() => {
@@ -29,6 +30,7 @@ export function Controls(props: ControlType) {
             />
          )}
          <OrbitControls
+            enabled={enableOrbitControl}
             makeDefault /* makeDefault makes the controls known to r3f, now transform-controls can auto-disable them when active */
             maxDistance={10}
             minDistance={3}
