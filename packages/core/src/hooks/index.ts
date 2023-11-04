@@ -9,3 +9,4 @@ export {
 } from "@react-three/fiber";
 export { useControls, useCreateStore } from "leva";
 export { useProgress, useGLTF, useCursor, useSelect } from "@react-three/drei";
+export { useDrag } from "@use-gesture/react";

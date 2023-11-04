@@ -20,11 +20,10 @@ export type ModelType = {
    scale?: [number, number, number];
    rotation?: [number, number, number];
    isSelected?: boolean;
+   annotations?: string[];
 };
 export type THREE_MESH = THREE.Mesh & {
-   material: {
-      color: THREE.Color;
-      name: string;
-   };
+   material?: any;
+   geometry?: any;
 };
 export type ModeType = "translate" | "rotate" | "scale";

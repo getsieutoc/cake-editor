@@ -22,7 +22,11 @@ import {
    ShortCutOverlay,
 } from "@/components";
 import { useProgress, useControls } from "@/hooks";
-import { CONTROLS_LEVA } from "@/utils/constants";
+import {
+   CONTROLS_LEVA,
+   __ContactShadows__,
+   __GizmoHelper__,
+} from "@/utils/constants";
 import { ModelType } from "@/utils/types";
 import {
    useContextMenuPosition,
@@ -134,11 +138,16 @@ export function CakeEditor(props: CakeEditorType) {
                <Crystals position={[-10, 0, 3]} count={4} countChild={3} />
 
                <ContactShadows
+                  name={__ContactShadows__}
                   scale={80}
                   position={[0.1, 0, 0.1]}
                   opacity={1}
                />
-               <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
+               <GizmoHelper
+                  name={__GizmoHelper__}
+                  alignment="bottom-right"
+                  margin={[100, 100]}
+               >
                   <GizmoViewport labelColor="white" axisHeadScale={1} />
                </GizmoHelper>
                <Controls autoRotate={autoRotate} />

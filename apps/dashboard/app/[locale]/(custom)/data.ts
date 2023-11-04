@@ -6,9 +6,11 @@ export const models: {
   scale?: [number, number, number];
   rotation?: [number, number, number];
   isSelected?: boolean;
+  annotations?: string[];
 }[] = [
   {
     name: 'Glass',
+    annotations: ['This is glass'],
     thumbnail: '/img/glass.jpg',
     path: '/models/glass.glb',
     position: [3.5, 0, -3.5],
@@ -16,6 +18,7 @@ export const models: {
   },
   {
     name: 'Flowers',
+    annotations: ['This is flowers'],
     thumbnail: '/img/flowers_decor.jpg',
     path: '/models/flowers_decor.glb',
     position: [-5, 0, -3],
@@ -24,6 +27,7 @@ export const models: {
   },
   {
     name: 'Straw',
+    annotations: ['This is straw!'],
     thumbnail: '/img/straw.jpg',
     path: '/models/straw.glb',
     position: [3.2, 0, -3],
@@ -31,6 +35,7 @@ export const models: {
   },
   {
     name: 'Fork',
+    annotations: ['This is fork'],
     thumbnail: '/img/fork.jpg',
     path: '/models/fork.glb',
     position: [2.5, 0, -3],
@@ -38,6 +43,7 @@ export const models: {
   },
   {
     name: 'Piece cake',
+    annotations: ['Piece cake is there!'],
     thumbnail: '/img/piece_cake.jpg',
     path: '/models/piece_cake.glb',
     position: [2, 0, -3],
@@ -45,6 +51,7 @@ export const models: {
   },
   {
     name: 'Chicken child',
+    annotations: ['This is a chicken child'],
     thumbnail: '/img/chicken_child.jpg',
     path: '/models/chicken_child.glb',
     rotation: [0, 0, 0],
@@ -52,12 +59,14 @@ export const models: {
   },
   {
     name: 'Blank cake',
+    annotations: ['White cake with fragrant jam filling and custard cake'],
     thumbnail: '/img/blank_cake_circle.jpg',
     path: '/models/blank_cake_circle.glb',
     position: [0, 1.1, 0],
   },
   {
     name: 'Baby shark',
+    annotations: ['Complete cake baby shark'],
     thumbnail: '/img/baby_shark.jpg',
     path: '/models/baby_shark.glb',
     position: [0, 1.1, 0.2],
@@ -65,6 +74,7 @@ export const models: {
   },
   {
     name: 'Turn table',
+    annotations: ['Turn table'],
     thumbnail: '/img/turntable.jpg',
     path: '/models/turntable.glb',
     position: [0, 0.005, 0],

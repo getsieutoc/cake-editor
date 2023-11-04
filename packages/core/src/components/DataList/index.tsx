@@ -69,7 +69,12 @@ export const DataList = (props: DataListTypes) => {
 
          {showListModel && (
             <VirtuosoGrid
-               style={{ height: 400 }}
+               style={{
+                  maxHeight: 500,
+                  height: (modelList.length / 4) * 100,
+                  // borderRadius: "3px",
+                  // border: "1px solid #bebebe",
+               }}
                totalCount={modelList.length}
                data={modelList}
                overscan={200}

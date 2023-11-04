@@ -13,12 +13,12 @@ import {
    PopoverBody,
    PopoverContent,
    PopoverTrigger,
+   AiOutlineCloseCircle,
 } from "@/components";
 import { ItemText3DType, useText3DList } from "@/globalStates";
 import { fonts } from "@/utils/constants";
 
-type AddTextTypes = {};
-export const Add3DText = (props: AddTextTypes) => {
+export const Add3DText = () => {
    const { openData, setOpen, textList, setTextList } = useText3DList();
    const isOpen = openData.x + openData.y > 0;
    const [text, setText] = useState<ItemText3DType>({
@@ -64,7 +64,12 @@ export const Add3DText = (props: AddTextTypes) => {
       setText({ ...text, [fieldName]: value });
    };
    return (
-      <Box position="absolute" top={openData.y} left={openData.x}>
+      <Box
+         position="absolute"
+         top={openData.y}
+         left={openData.x}
+         display={isOpen ? "-moz-initial" : "none"}
+      >
          <Popover
             isOpen={isOpen}
             closeOnBlur={false}
@@ -73,13 +78,17 @@ export const Add3DText = (props: AddTextTypes) => {
             lazyBehavior="keepMounted"
          >
             {isOpen && (
-               <HStack spacing={0}>
+               <Box>
                   <PopoverTrigger>
-                     <Button onClick={onClose} size="xs">
-                        close
+                     <Button
+                        leftIcon={<AiOutlineCloseCircle size={15} />}
+                        onClick={onClose}
+                        size="xs"
+                     >
+                        Close
                      </Button>
                   </PopoverTrigger>
-               </HStack>
+               </Box>
             )}
 
             <PopoverContent>

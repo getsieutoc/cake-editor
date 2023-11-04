@@ -10,6 +10,12 @@ export const CONTROLS_LEVA = {
 };
 export const __GROUP_MODEL__ = "__GROUP_MODEL__";
 export const __PRIMITIVE_MODEL__ = "__PRIMITIVE_MODEL__";
+export const __TEXT_3D__ = "__TEXT_3D__";
+export const __LIGHT__ = "__LIGHT__";
+export const __CRYSTAL__ = "__CRYSTAL__";
+export const __ContactShadows__ = "__ContactShadows__";
+export const __GizmoHelper__ = "__GizmoHelper__";
+export const __TransformControls__ = "__TransformControls__";
 
 export const modes: ModeType[] = ["translate", "rotate", "scale"];
 export const SHORT_CUTS = {
@@ -22,6 +28,7 @@ export const SHORT_CUTS = {
    KeyG: "KeyG",
    KeyD: "KeyD",
    KeyC: "KeyC",
+   Delete: "Delete",
 };
 export const fonts = [
    {

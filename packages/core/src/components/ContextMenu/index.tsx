@@ -7,6 +7,7 @@ import {
 } from "@/globalStates";
 import { getGroupObjectSelected } from "@/utils/service";
 import { THREE_MESH } from "@/utils/types";
+import { __TEXT_3D__ } from "@/utils/constants";
 
 type ContextMenuTypes = {};
 export const ContextMenu = (props: ContextMenuTypes) => {
@@ -15,6 +16,8 @@ export const ContextMenu = (props: ContextMenuTypes) => {
    const { selectedModel, setModel, resetSelectedModel, transformControlsRef } =
       useControlModel();
    const { setOpen: setOpenAdd3DText } = useText3DList();
+   const isDisabledObjAnd3DText =
+      !selectedModel.id || selectedModel.name === __TEXT_3D__;
 
    useEffect(() => {
       if (position.x + position.y > 0) {
@@ -40,7 +43,10 @@ export const ContextMenu = (props: ContextMenuTypes) => {
       transformControlsRef &&
          transformControlsRef.detach &&
          transformControlsRef.detach();
-      selectedModel.object?.parent?.remove(selectedModel.object);
+      selectedModel.object.material = undefined;
+      selectedModel.object.geometry = undefined;
+      selectedModel.object.parent?.remove(selectedModel.object);
+
       resetSelectedModel();
    };
    const handleGroupAndMove = () => {
@@ -63,17 +69,38 @@ export const ContextMenu = (props: ContextMenuTypes) => {
                <MenuItem onClick={() => setOpenAdd3DText(position)}>
                   Add text
                </MenuItem>
-               <MenuItem onClick={handleCopy} isDisabled={!selectedModel.id}>
+               <MenuItem
+                  onClick={handleCopy}
+                  isDisabled={isDisabledObjAnd3DText}
+               >
                   Duplicate
                </MenuItem>
                <MenuItem
-                  onClick={handleGroupAndMove}
+                  onClick={() => setModel({ ...selectedModel, mode: 1 })}
                   isDisabled={!selectedModel.id}
+               >
+                  Rotate [R]
+               </MenuItem>
+               <MenuItem
+                  onClick={() => setModel({ ...selectedModel, mode: 2 })}
+                  isDisabled={!selectedModel.id}
+               >
+                  Scale [S]
+               </MenuItem>
+               <MenuItem
+                  onClick={() => setModel({ ...selectedModel, mode: 0 })}
+                  isDisabled={!selectedModel.id}
+               >
+                  Translate [G]
+               </MenuItem>
+               <MenuItem
+                  onClick={handleGroupAndMove}
+                  isDisabled={isDisabledObjAnd3DText}
                >
                   Group and transform
                </MenuItem>
                <MenuItem onClick={handleRemove} isDisabled={!selectedModel.id}>
-                  Delete
+                  Delete [Delete]
                </MenuItem>
             </MenuList>
          </Menu>

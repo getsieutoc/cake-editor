@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { OrbitControls, TransformControls } from "@/components";
 import { TransformControlsProps } from "@/utils/types";
 import { useControlModel } from "@/globalStates";
-import { modes } from "@/utils/constants";
+import { __TransformControls__, modes } from "@/utils/constants";
 
 type ControlType = {
    autoRotate?: boolean;
@@ -21,10 +21,11 @@ export function Controls(props: ControlType) {
       <>
          {selectedModel.id && (
             <TransformControls
+               name={__TransformControls__}
                ref={transformControlsRef as any}
                object={selectedModel.object}
                mode={modes[selectedModel?.mode ?? 0]}
-               size={0.5}
+               size={1}
             />
          )}
          <OrbitControls

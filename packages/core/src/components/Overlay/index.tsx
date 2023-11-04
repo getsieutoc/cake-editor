@@ -77,7 +77,17 @@ export function ShortCutOverlay() {
                   </Box>
                   {` Move/Grab`}
                </Box>
-
+               <Box>
+                  <Box
+                     marginLeft={1}
+                     paddingX={1}
+                     border="1px solid gray"
+                     display="inline"
+                  >
+                     Delete
+                  </Box>
+                  {` Delete`}
+               </Box>
                <Box>
                   <Box
                      marginLeft={1}
