@@ -7,6 +7,7 @@ import {
    FormLabel,
    Input,
 } from "@/components";
+import { textToHtml } from "@/utils/service";
 import { AnnotationType } from "@/utils/types";
 
 type FormInputAnnotationTypes = {
@@ -32,12 +33,13 @@ export const FormInputAnnotation = (props: FormInputAnnotationTypes) => {
             color="black"
             rows={3}
             defaultValue={annotation.content}
-            onChange={(e) =>
+            onChange={(e) => {
+               const newVal = textToHtml(e.target.value);
                setItemEdit({
                   ...itemEdit,
-                  content: e.target.value,
-               })
-            }
+                  content: newVal,
+               });
+            }}
          />
          <Box>
             <HStack>
