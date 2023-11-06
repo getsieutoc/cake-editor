@@ -66,3 +66,14 @@ export function fuzzySearch(
 // Perform a fuzzy search
 // const searchResult = fuzzySearch(complexObjectArray, "John", 2);
 // console.log(searchResult);
+
+export function getPrimitiveObject(
+   obj: THREE_MESH | THREE.Object3D<THREE.Object3DEventMap> | undefined
+) {
+   if (!obj || !obj.parent) return undefined;
+   if (obj.parent?.name === __PRIMITIVE_MODEL__) {
+      return obj.parent;
+   } else {
+      return getPrimitiveObject(obj.parent);
+   }
+}

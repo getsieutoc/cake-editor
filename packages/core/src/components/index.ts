@@ -31,6 +31,7 @@ export {
    PopoverContent,
    PopoverTrigger,
    FormLabel,
+   SimpleGrid,
 } from "@chakra-ui/react";
 export { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 export {

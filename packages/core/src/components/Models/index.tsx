@@ -44,15 +44,18 @@ export function Model(props: ModelTypes) {
 
    const annotations = useMemo(() => {
       if (modelDetail.annotations?.length) {
+         const scene = gltf.scene;
          modelDetail.annotations.forEach((ann, i) => {
             const position = { x: 0, y: 0, z: 0 };
 
-            gltf.scene?.children.forEach(
+            scene?.children.forEach(
                (chil: THREE.Object3D<THREE.Object3DEventMap>) => {
                   const isObject =
+                     chil.name &&
                      chil.name !== __PRIMITIVE_MODEL__ &&
                      chil.name !== __GROUP_MODEL__ &&
-                     chil.type === "Mesh";
+                     (chil.type === "Mesh" || chil.type === "Group") &&
+                     (chil.position.x || chil.position.y || chil.position.z);
                   if (isObject) {
                      position.x = chil.position.x;
                      position.y = chil.position.y;
@@ -62,8 +65,8 @@ export function Model(props: ModelTypes) {
                }
             );
             // store to scene for backup in local
-            gltf.scene.userData = {
-               ...gltf.scene.userData,
+            scene.userData = {
+               ...scene.userData,
                [`${i}`]: {
                   id: `${i}`,
                   idModel: modelDetail.id,
@@ -73,20 +76,24 @@ export function Model(props: ModelTypes) {
             };
          });
 
-         const anns = gltf.scene.userData;
-         return Object.keys(anns).map((key, idx) => {
-            return (
-               <Annotation
-                  key={idx}
-                  index={idx}
-                  annotation={anns[key]}
-                  scene={gltf.scene}
-               />
-            );
+         const anns = scene.userData;
+
+         return Object.keys(anns)?.map((key, idx) => {
+            const annItem = anns[key];
+            if (annItem.id)
+               return (
+                  <Annotation
+                     key={idx}
+                     index={idx}
+                     annotation={annItem}
+                     scene={scene}
+                  />
+               );
          });
       }
+
       return [];
-   }, [pos2d.x, pos2d.y, modelDetail.annotations?.length]);
+   }, [pos2d.x, pos2d.y, modelDetail.annotations]);
 
    const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
@@ -156,3 +163,4 @@ export function Model(props: ModelTypes) {
 
 export { ModelWrapper } from "./ModelWrapper";
 export { Annotation } from "./Annotation";
+export { FormInputAnnotation } from "./FormInput";

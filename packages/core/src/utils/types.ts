@@ -26,7 +26,7 @@ export type ModelType = {
    scale?: [number, number, number];
    rotation?: [number, number, number];
    isSelected?: boolean;
-   annotations?: string[];
+   annotations: string[];
 };
 export type THREE_MESH = THREE.Mesh & {
    material?: any;

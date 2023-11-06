@@ -3,19 +3,21 @@ import { Box, Menu, MenuList, MenuItem } from "@/components";
 import {
    useContextMenuPosition,
    useControlModel,
+   useListModel,
    useText3DList,
 } from "@/globalStates";
-import { getGroupObjectSelected } from "@/utils/service";
+import _ from "lodash";
+import { getGroupObjectSelected, getPrimitiveObject } from "@/utils/service";
 import { THREE_MESH } from "@/utils/types";
-import { __TEXT_3D__ } from "@/utils/constants";
+import { __PRIMITIVE_MODEL__, __TEXT_3D__ } from "@/utils/constants";
 
-type ContextMenuTypes = {};
-export const ContextMenu = (props: ContextMenuTypes) => {
+export const ContextMenu = () => {
    const { position, group } = useContextMenuPosition();
    const [show, setShow] = useState(false);
    const { selectedModel, setModel, resetSelectedModel, transformControlsRef } =
       useControlModel();
    const { setOpen: setOpenAdd3DText } = useText3DList();
+   const { listItem, setListItem } = useListModel();
    const isDisabledObjAnd3DText =
       !selectedModel.id || selectedModel.name === __TEXT_3D__;
 
@@ -70,7 +72,20 @@ export const ContextMenu = (props: ContextMenuTypes) => {
                   Add text
                </MenuItem>
                <MenuItem
-                  // onClick={() => setOpenAdd3DText(position)}
+                  onClick={() => {
+                     const objectModel = getPrimitiveObject(
+                        selectedModel.object
+                     );
+
+                     const idModel = objectModel?.userData["0"].idModel;
+                     listItem.forEach((o) => {
+                        if (o.id === idModel) {
+                           o.annotations.push("New label");
+                           return;
+                        }
+                     });
+                     setListItem(_.cloneDeep(listItem));
+                  }}
                   isDisabled={!selectedModel.id}
                >
                   Add label (Object selected)

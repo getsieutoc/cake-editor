@@ -1,16 +1,15 @@
-import { ComponentType, useMemo, useState } from "react";
-import { GridListProps, VirtuosoGrid } from "react-virtuoso";
+import { useMemo, useState } from "react";
+import { Grid } from "react-virtualized";
 import _ from "lodash";
-import styled from "@emotion/styled";
 import { Box, Input, HStack, Button } from "@/components";
-import { ModelType } from "@/utils/types";
+import { ButtonProps, ModelType } from "@/utils/types";
 import { Item } from "./Item";
 import { useShowHide, useListModel } from "@/globalStates";
 import { fuzzySearch } from "@/utils/service";
 
 type DataListTypes = {
    data: ModelType[];
-   size?: (string & {}) | "sm" | "md" | "lg" | "xs";
+   size?: ButtonProps["size"];
 };
 export const DataList = (props: DataListTypes) => {
    const { data, size = "xs" } = props;
@@ -40,18 +39,21 @@ export const DataList = (props: DataListTypes) => {
       temp.push(newItem);
       setListItem(temp);
    };
+
+   const rowCount =
+      Math.floor(modelList.length / 4) <= 0
+         ? 1
+         : Math.floor(modelList.length / 4 + 1);
    return (
       <Box>
          <HStack spacing={1}>
-            <Box w="100%">
+            <Box width="100%">
                <Input
                   onFocus={() => setShowListModel(true)}
                   placeholder="Search..."
                   _placeholder={{ color: "white" }}
                   size={size}
-                  onChange={(e) => {
-                     setText(e.target.value);
-                  }}
+                  onChange={(e) => setText(e.target.value)}
                />
             </Box>
             <Box>
@@ -68,60 +70,40 @@ export const DataList = (props: DataListTypes) => {
             </Box>
          </HStack>
 
-         {showListModel && (
-            <VirtuosoGrid
-               style={{
-                  maxHeight: 500,
-                  height: (modelList.length / 4) * 100,
-                  // borderRadius: "3px",
-                  // border: "1px solid #bebebe",
-               }}
-               totalCount={modelList.length}
-               data={modelList}
-               overscan={200}
-               components={{
-                  Item: ItemContainer,
-                  List: ListContainer as ComponentType<GridListProps>,
-                  ScrollSeekPlaceholder: ({ height, width, index }) => (
-                     <ItemContainer>
-                        <ItemWrapper>{"--"}</ItemWrapper>
-                     </ItemContainer>
-                  ),
-               }}
-               itemContent={(index, item) => (
-                  <Item
-                     onClick={() => handleSelect(item)}
-                     index={index}
-                     item={item}
-                  />
-               )}
-               scrollSeekConfiguration={{
-                  enter: (velocity) => Math.abs(velocity) > 200,
-                  exit: (velocity) => Math.abs(velocity) < 30,
-                  change: (_, range) => console.log({ range }),
-               }}
-            />
-         )}
+         <>
+            {showListModel && modelList.length && (
+               <Grid
+                  cellRenderer={({
+                     columnIndex,
+                     key,
+                     rowIndex,
+                     style,
+                     ...rest
+                  }) => {
+                     const indexItem = rowIndex * 4 + columnIndex;
+                     return (
+                        <Box key={key} style={style}>
+                           {modelList?.[indexItem] && (
+                              <Item
+                                 index={indexItem}
+                                 item={modelList?.[indexItem]}
+                                 onClick={() =>
+                                    handleSelect(modelList[indexItem])
+                                 }
+                              />
+                           )}
+                        </Box>
+                     );
+                  }}
+                  columnCount={4}
+                  columnWidth={70}
+                  rowHeight={73}
+                  rowCount={rowCount}
+                  height={rowCount * 100}
+                  width={4 * 70}
+               />
+            )}
+         </>
       </Box>
    );
 };
-const ItemContainer = styled.div`
-   padding: 1px;
-   width: 71px;
-   display: flex;
-   flex: none;
-   align-content: stretch;
-`;
-
-const ItemWrapper = styled.div`
-   flex: 1;
-   text-align: center;
-   font-size: 80%;
-   border: 1px solid var(gray);
-   white-space: nowrap;
-`;
-
-const ListContainer = styled.div`
-   display: flex;
-   flex-wrap: wrap;
-`;

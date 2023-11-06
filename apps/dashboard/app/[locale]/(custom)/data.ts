@@ -7,7 +7,7 @@ export const models: {
   scale?: [number, number, number];
   rotation?: [number, number, number];
   isSelected?: boolean;
-  annotations?: string[];
+  annotations: string[];
 }[] = [
   {
     id: '0',
@@ -49,7 +49,7 @@ export const models: {
   {
     id: '4',
     name: 'Piece cake',
-    annotations: ['Piece cake is there!'],
+    annotations: ['Piece cake is there!', 'Hello world!'],
     thumbnail: '/img/piece_cake.jpg',
     path: '/models/piece_cake.glb',
     position: [2, 0, -3],
@@ -84,7 +84,7 @@ export const models: {
   {
     id: '8',
     name: 'Turn table',
-    annotations: ['Turn table'],
+    annotations: [''],
     thumbnail: '/img/turntable.jpg',
     path: '/models/turntable.glb',
     position: [0, 0.005, 0],
