@@ -103,7 +103,7 @@ export const BenderText3D = (props: BenderText3DTypes) => {
                         }
                         setState({ ...state, angle: v });
                      }}
-                     clampValueOnBlur
+                     clampValueOnBlur={false}
                      inputMode="numeric"
                   >
                      <NumberInputField />

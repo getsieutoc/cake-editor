@@ -56,12 +56,20 @@ export const Annotation = (props: AnnotationTypes) => {
 
       Object.keys(scene.userData).map((key, i) => {
          if (key === annotation.id) {
-            delete scene.userData[key];
-            listTemp.map((o) => {
-               if (o.id === annotation.idModel && o.annotations) {
-                  delete o.annotations[Number(annotation.id)];
-               }
-            });
+            if (key !== "0") {
+               delete scene.userData[key];
+               listTemp.map((o) => {
+                  if (o.id === annotation.idModel && o.annotations) {
+                     delete o.annotations[Number(annotation.id)];
+                  }
+               });
+            } else {
+               listTemp.map((o) => {
+                  if (o.id === annotation.idModel && o.annotations) {
+                     o.annotations[Number(annotation.id)] = "";
+                  }
+               });
+            }
          }
       });
       setListItem(listTemp);
