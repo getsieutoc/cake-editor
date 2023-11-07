@@ -7,7 +7,8 @@ type ModelWrapperTypes = {};
 export const ModelWrapper = (props: ModelWrapperTypes) => {
    const { listItem } = useListModel();
    const { textList } = useText3DList();
-   const { selectedModel, setModel, transformControlsRef } = useControlModel();
+   const { selectedModel, setModel, transformControlsRef, resetSelectedModel } =
+      useControlModel();
    const keyMap = useKeyboard();
 
    useFrame((state, delta) => {
@@ -47,6 +48,7 @@ export const ModelWrapper = (props: ModelWrapperTypes) => {
                selectedModel.object.material = undefined;
                selectedModel.object.geometry = undefined;
                selectedModel.object.parent?.remove(selectedModel.object);
+               resetSelectedModel();
             })();
       }
    });

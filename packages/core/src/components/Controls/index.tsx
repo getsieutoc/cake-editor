@@ -30,6 +30,7 @@ export function Controls(props: ControlType) {
             />
          )}
          <OrbitControls
+            enableDamping
             enabled={enableOrbitControl}
             makeDefault /* makeDefault makes the controls known to r3f, now transform-controls can auto-disable them when active */
             maxDistance={10}

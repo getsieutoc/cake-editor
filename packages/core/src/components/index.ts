@@ -32,6 +32,11 @@ export {
    PopoverTrigger,
    FormLabel,
    SimpleGrid,
+   NumberDecrementStepper,
+   NumberInput,
+   NumberInputField,
+   NumberInputStepper,
+   NumberIncrementStepper,
 } from "@chakra-ui/react";
 export { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 export {
@@ -50,6 +55,7 @@ export {
    GizmoViewport,
    ContactShadows,
    OrbitControls,
+   CurveModifier,
    TransformControls,
 } from "@react-three/drei";
 export { Leva, LevaPanel, button } from "leva";
@@ -62,6 +68,7 @@ export * from "./Overlay";
 export * from "./Editor";
 export * from "./Controls";
 export * from "./ColorPicker";
+export * from "./BenderText3D";
 export * from "./DataList";
 export * from "./ContextMenu";
 export * from "./Text3D";

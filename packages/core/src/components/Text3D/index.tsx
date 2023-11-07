@@ -1,7 +1,10 @@
-import { useRef } from "react";
-import { Text3D } from "@/components";
+import { useRef, useLayoutEffect } from "react";
+import { Text3D, THREE } from "@/components";
 import { THREE_MESH, ThreeEvent } from "@/utils/types";
 import { __GROUP_MODEL__, __TEXT_3D__ } from "@/utils/constants";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
+// import { benderText3D } from "@/utils/service";
+
 import {
    ItemText3DType,
    useContextMenuPosition,
@@ -16,7 +19,14 @@ export const Text3DRender = (props: Text3DRenderTypes) => {
    const textRef = useRef<THREE_MESH & THREE.Group<THREE.Object3DEventMap>>(
       null
    );
+   const meshRef = useRef(null);
    const groupRef = useRef<THREE.Group>(null);
+   useLayoutEffect(() => {
+      if (textRef.current) {
+         textRef.current.geometry.center();
+      }
+   }, []);
+
    const handleClickText = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
 
@@ -41,33 +51,35 @@ export const Text3DRender = (props: Text3DRenderTypes) => {
    };
 
    return (
-      <group
-         ref={groupRef}
-         name={__GROUP_MODEL__}
-         onClick={handleClickText}
-         onPointerMissed={handlePointerMissed}
-         onContextMenu={handleContextMenu}
-         onPointerOver={(e: ThreeEvent<MouseEvent>) => {
-            e.stopPropagation();
-            document.body.style.cursor = "pointer";
-         }}
-         onPointerOut={(e) => (document.body.style.cursor = "default")}
-         dispose={null}
-      >
-         <Text3D
-            ref={textRef}
-            font={font}
-            name={__TEXT_3D__}
-            receiveShadow
-            castShadow
+      <>
+         <group
+            ref={groupRef}
+            name={__GROUP_MODEL__}
+            onClick={handleClickText}
+            onPointerMissed={handlePointerMissed}
+            onContextMenu={handleContextMenu}
+            onPointerOver={(e: ThreeEvent<MouseEvent>) => {
+               e.stopPropagation();
+               document.body.style.cursor = "pointer";
+            }}
+            onPointerOut={(e) => (document.body.style.cursor = "default")}
             dispose={null}
-            {...rest}
          >
-            {content}
-            <meshMatcapMaterial color={color} />
-            {/* <meshNormalMaterial /> */}
-         </Text3D>
-      </group>
+            <Text3D
+               ref={textRef}
+               font={font}
+               name={__TEXT_3D__}
+               receiveShadow
+               castShadow
+               dispose={null}
+               // {...rest}
+            >
+               {content}
+               <meshMatcapMaterial ref={meshRef} color={color} />
+               {/* <meshNormalMaterial /> */}
+            </Text3D>
+         </group>
+      </>
    );
 };
 

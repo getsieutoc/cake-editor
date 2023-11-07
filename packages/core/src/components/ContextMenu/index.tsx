@@ -86,7 +86,7 @@ export const ContextMenu = () => {
                      });
                      setListItem(_.cloneDeep(listItem));
                   }}
-                  isDisabled={!selectedModel.id}
+                  isDisabled={isDisabledObjAnd3DText}
                >
                   Add label (Object selected)
                </MenuItem>

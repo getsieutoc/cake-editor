@@ -20,6 +20,7 @@ import {
    GizmoViewport,
    ContactShadows,
    ShortCutOverlay,
+   BenderText3D,
 } from "@/components";
 import { useProgress, useControls } from "@/hooks";
 import {
@@ -91,22 +92,28 @@ export function CakeEditor(props: CakeEditorType) {
             </Box>
             <Box position="relative" height="130px">
                {selectedModel.id && (
-                  <ColorPicker
-                     width="200px"
-                     position="absolute"
-                     fontWeight={600}
-                     fontSize={11}
-                     name={
-                        selectedModel.displayName + " - " + selectedModel.name
-                     }
-                     defaultValue={selectedModel.object?.material?.color?.getHexString()}
-                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        if (selectedModel.object) {
-                           selectedModel.object.material.color =
-                              new THREE.Color(e.target.value);
+                  <Box>
+                     <ColorPicker
+                        top={0}
+                        width="200px"
+                        position="absolute"
+                        fontWeight={600}
+                        fontSize={11}
+                        name={
+                           selectedModel.displayName +
+                           " - " +
+                           selectedModel.name
                         }
-                     }}
-                  />
+                        defaultValue={selectedModel.object?.material?.color?.getHexString()}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                           if (selectedModel.object) {
+                              selectedModel.object.material.color =
+                                 new THREE.Color(e.target.value);
+                           }
+                        }}
+                     />
+                     <BenderText3D top="50px" position="absolute" />
+                  </Box>
                )}
             </Box>
          </HStack>
