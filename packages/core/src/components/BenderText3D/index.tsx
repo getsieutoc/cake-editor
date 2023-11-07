@@ -39,9 +39,9 @@ export const BenderText3D = (props: BenderText3DTypes) => {
    const isOpen = !!selectedModel.id;
    const onClose = () => resetSelectedModel();
 
-   const debounce = _.debounce(function (value: string) {
-      setState({ ...state, text: value });
-   }, 300);
+   // const debounce = _.debounce(function (value: string) {
+   //    setState({ ...state, text: value });
+   // }, 300);
 
    useEffect(() => {
       if (selectedModel.object?.geometry) {
