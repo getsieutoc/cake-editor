@@ -38,7 +38,8 @@ export function Model(props: ModelTypes) {
    const gltf = useGLTF(path) as DreiGLTF;
    const modelRef = useRef<THREE.Group>(null);
    const primitiveRef = useRef<PrimitiveProps>(null);
-   const { selectedModel, setModel, resetSelectedModel } = useControlModel();
+   const { selectedModel, setModel, resetSelectedModel, isTransform } =
+      useControlModel();
    const posContextMenu = useContextMenuPosition();
    const [pos2d, setPos2d] = useState({ x: 0, y: 0 });
 
@@ -97,6 +98,8 @@ export function Model(props: ModelTypes) {
 
    const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
       e.stopPropagation();
+      if (isTransform) return;
+
       const obj = e.object as THREE_MESH;
       obj.castShadow = true;
       obj.receiveShadow = true;
