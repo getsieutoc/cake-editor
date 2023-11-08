@@ -81,8 +81,8 @@ importers:
         specifier: 10.16.4
         version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
       html-react-parser:
-        specifier: 4.2.7
-        version: 4.2.7(react@18.2.0)
+        specifier: 4.2.10
+        version: 4.2.10(react@18.2.0)
       jotai:
         specifier: 2.4.3
         version: 2.4.3(@types/react@18.2.31)(react@18.2.0)
@@ -4853,22 +4853,22 @@ packages:
     resolution: {integrity: sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==}
     dev: true
 
-  /html-dom-parser@5.0.2:
-    resolution: {integrity: sha512-TPsxRbmzLQP4umvzRnI3US/DuqoHTX3QOGTsH9pNST6z1tm/ZOP4eWRqvGrv6rvOX42QRPF6opbOBoHM2UfTFQ==}
+  /html-dom-parser@5.0.3:
+    resolution: {integrity: sha512-slsc6ipw88OUZjAayRs5NTmfOQCwcUa3hNyk6AdsbQxY09H5Lr1Y3CZ4ZlconMKql3Ga6sWg3HMoUzo7KSItaQ==}
     dependencies:
       domhandler: 5.0.3
       htmlparser2: 9.0.0
     dev: false
 
-  /html-react-parser@4.2.7(react@18.2.0):
-    resolution: {integrity: sha512-2Uf9CdzqDQ/CrUiooSEB4IcHcB8bmZKhgVCzNMAb66J1L+fmxLS/tAGwjfnF6P9WNUCkbx/dGb31u0gGIKmyfA==}
+  /html-react-parser@4.2.10(react@18.2.0):
+    resolution: {integrity: sha512-JyKZVQ+kQ8PdycISwkuLbEEvV/k4hWhU6cb6TT7yGaYwdqA7cPt4VRYXkCZcix2vlQtgDBSMJUmPI2jpNjPGvg==}
     peerDependencies:
       react: 0.14 || 15 || 16 || 17 || 18
     dependencies:
       domhandler: 5.0.3
-      html-dom-parser: 5.0.2
+      html-dom-parser: 5.0.3
       react: 18.2.0
-      react-property: 2.0.0
+      react-property: 2.0.2
       style-to-js: 1.1.8
     dev: false
 
@@ -6245,8 +6245,8 @@ packages:
     resolution: {integrity: sha512-alTKsjEL0dKH/ru1Iyn7vliS2QRcBp9zZPGoWxUOvRGWPUYgjo+V01is7p04It6KhgrzhJGnIj9GgX8W4bZoCQ==}
     dev: false
 
-  /react-property@2.0.0:
-    resolution: {integrity: sha512-kzmNjIgU32mO4mmH5+iUyrqlpFQhF8K2k7eZ4fdLSOPFrD1XgEuSBv9LDEgxRXTMBqMd8ppT0x6TIzqE5pdGdw==}
+  /react-property@2.0.2:
+    resolution: {integrity: sha512-+PbtI3VuDV0l6CleQMsx2gtK0JZbZKbpdu5ynr+lbsuvtmgbNcS3VM0tuY2QjFNOcWxvXeHjDpy42RO+4U2rug==}
     dev: false
 
   /react-reconciler@0.27.0(react@18.2.0):
