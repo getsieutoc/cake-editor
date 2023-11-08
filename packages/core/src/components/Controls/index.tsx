@@ -1,25 +1,43 @@
+import { useEffect, useRef } from "react";
 import { OrbitControls, TransformControls } from "@/components";
-import { useThree } from "@/hooks";
+import { TransformControlsProps } from "@/utils/types";
 import { useControlModel } from "@/globalStates";
-import { modes } from "@/utils/constants";
-import { OrbitControlsProps } from "@/utils/types";
+import { __TransformControls__, modes } from "@/utils/constants";
 
-type ControlType = OrbitControlsProps & {};
+type ControlType = {
+   autoRotate?: boolean;
+};
 export function Controls(props: ControlType) {
-   const { selectedModel, setModel } = useControlModel();
-   const scene = useThree((state) => state.scene);
+   const { autoRotate = false } = props;
+   const { selectedModel, setTransformControlsRef, enableOrbitControl } =
+      useControlModel();
+   const transformControlsRef = useRef<TransformControlsProps>(null!);
 
+   useEffect(() => {
+      if (transformControlsRef.current) {
+         setTransformControlsRef(transformControlsRef.current);
+      }
+   }, [selectedModel.id]);
    return (
       <>
-         {/* As of drei@7.13 transform-controls can refer to the target by children, or the object prop */}
-         {selectedModel.name && (
+         {selectedModel.id && (
             <TransformControls
-               object={scene.getObjectByName(selectedModel.name)}
+               name={__TransformControls__}
+               ref={transformControlsRef as any}
+               object={selectedModel.object}
                mode={modes[selectedModel?.mode ?? 0]}
+               size={1}
             />
          )}
-         {/* makeDefault makes the controls known to r3f, now transform-controls can auto-disable them when active */}
-         <OrbitControls {...props} />
+         <OrbitControls
+            enableDamping
+            enabled={enableOrbitControl}
+            makeDefault /* makeDefault makes the controls known to r3f, now transform-controls can auto-disable them when active */
+            maxDistance={10}
+            minDistance={3}
+            autoRotate={autoRotate}
+            maxPolarAngle={Math.PI / 2.8}
+         />
       </>
    );
 }

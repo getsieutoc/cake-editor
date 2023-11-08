@@ -1,21 +1,21 @@
 import { useRef, useState } from "react";
 import { type MeshProps, useFrame, THREE } from "@/components";
+import { __CRYSTAL__ } from "@/utils/constants";
 
 type CrystalType = MeshProps & {
    autoRotateWhenHover?: boolean;
-   keyMap?: { [key: string]: boolean };
 };
 export * from "./Crystals";
 export function Crystal(props: CrystalType) {
-   const { autoRotateWhenHover = true, keyMap, ...rest } = props;
+   const { autoRotateWhenHover = true, ...rest } = props;
    const ref = useRef<any>(null!);
    const [hovered, setHovered] = useState(false);
 
-   useFrame((__: any, delta: number) => {
-      keyMap?.["KeyA"] && hovered && (ref.current.position.x -= 1 * delta);
-      keyMap?.["KeyD"] && hovered && (ref.current.position.x += 1 * delta);
-      keyMap?.["KeyW"] && hovered && (ref.current.position.z -= 1 * delta);
-      keyMap?.["KeyS"] && hovered && (ref.current.position.z += 1 * delta);
+   useFrame((state: any, delta: number) => {
+      hovered && (ref.current.position.x -= 1 * delta);
+      hovered && (ref.current.position.x += 1 * delta);
+      hovered && (ref.current.position.z -= 1 * delta);
+      hovered && (ref.current.position.z += 1 * delta);
 
       const color = new THREE.Color(
          Math.floor(Math.random() * (hovered ? 3 : 16777216))
@@ -31,6 +31,7 @@ export function Crystal(props: CrystalType) {
       <mesh
          {...props}
          ref={ref}
+         name={__CRYSTAL__}
          onPointerOver={() => {
             setHovered(true);
          }}

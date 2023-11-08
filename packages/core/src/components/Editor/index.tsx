@@ -1,149 +1,173 @@
-import { useEffect, useRef, useState, Suspense } from "react";
+import { useEffect, useState, Suspense, ChangeEvent } from "react";
 import {
    Box,
    Leva,
-   Model,
-   Lights,
    THREE,
+   button,
+   HStack,
+   Lights,
    Canvas,
-   Overlay,
+   DataList,
    Crystals,
-   Spinner,
    Progress,
+   Controls,
+   Add3DText,
+   ContextMenu,
+   ColorPicker,
    Environment,
-   useControls,
    GizmoHelper,
+   ModelWrapper,
    GizmoViewport,
    ContactShadows,
-   PrimitiveProps,
+   ShortCutOverlay,
+   BenderText3D,
 } from "@/components";
-import { useKeyboard, useProgress } from "@/hooks";
-import { CONTROLS_LEVA, modes } from "@/utils/constants";
-import { ModelType, ThreeEvent } from "@/utils/types";
-import { useControlModel } from "@/globalStates";
-import { Controls } from "../Controls";
+import { useProgress, useControls } from "@/hooks";
+import {
+   CONTROLS_LEVA,
+   __ContactShadows__,
+   __GizmoHelper__,
+} from "@/utils/constants";
+import { ModelType } from "@/utils/types";
+import {
+   useContextMenuPosition,
+   useControlModel,
+   useListModel,
+   useShowHide,
+   useText3DList,
+} from "@/globalStates";
 
 type CakeEditorType = {
    background?: string;
    models: ModelType[];
+   positionPanel?: { x: number; y: number };
 };
 export function CakeEditor(props: CakeEditorType) {
-   const { background = "", models } = props;
+   const { background = "", models, positionPanel = { x: 0, y: 0 } } = props;
    const [height, setHeight] = useState(400);
-   const [autoRotate, setAutoRotate] = useState(false);
-   const primitiveRefs = useRef<{ current: PrimitiveProps | null }[]>([]);
-   const keyMap = useKeyboard();
-   const { selectedModel, setModel } = useControlModel();
    const { progress } = useProgress();
+   const { selectedModel, resetSelectedModel } = useControlModel();
+   const { showPanelLeva, setShowPanelLeva, autoRotate, setAutoRotate } =
+      useShowHide();
+   const { clearList } = useListModel();
+   const posContextMenu = useContextMenuPosition();
+   const { reset: reset3DText } = useText3DList();
+   //## Start add to panel leva
+   useControls({
+      "Clean Up": button(() => {
+         clearList();
+         resetSelectedModel();
+         reset3DText();
+         models.map((o) => (o.isSelected = false));
+      }),
+   });
    useControls(CONTROLS_LEVA.Auto_rotate, {
       "start/stop": {
          value: autoRotate,
          onChange: (v) => setAutoRotate(v),
       },
    });
-
+   useControls(
+      CONTROLS_LEVA.Panel,
+      {
+         show: {
+            value: showPanelLeva,
+            onChange: (v) => setShowPanelLeva(v),
+         },
+      },
+      { collapsed: true }
+   );
+   //## End add to panel leva
    useEffect(() => {
-      setHeight(window.innerHeight);
-      models?.map((__, index) => {
-         primitiveRefs.current[index] = { current: null };
-      });
+      setHeight(window.innerHeight * 0.9);
    }, []);
 
-   const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
-      e.stopPropagation();
-      const obj = e.object as THREE.Mesh & {
-         material: { name: string };
-      };
-      setModel({ id: obj.uuid, name: obj.name });
-      const materialName = obj.material.name;
-      document
-         .getElementById(
-            `${CONTROLS_LEVA.Colors}.` + materialName.toUpperCase()
-         )
-         ?.focus();
-   };
-   const handlePointerMissed = (e: MouseEvent) => {
-      e.type === "click" && setModel({ id: null, name: "", mode: 0 });
-   };
-   const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
-      if (selectedModel.name === e.object.name) {
-         e.stopPropagation();
-         setModel({
-            ...selectedModel,
-            mode: ((selectedModel?.mode ?? 0) + 1) % modes.length,
-         });
-      }
-   };
    return (
       <Box width="100%" height={height}>
-         <Box position="relative">
-            <Overlay />
-         </Box>
-
+         {/* ---Helper and List models--- */}
+         <HStack position="absolute" spacing={1} zIndex={1}>
+            <Box position="relative" height="130px">
+               <ShortCutOverlay />
+               <DataList data={models} />
+            </Box>
+            <Box position="relative" height="130px">
+               {selectedModel.id && (
+                  <Box>
+                     <ColorPicker
+                        top={0}
+                        width="200px"
+                        position="absolute"
+                        fontWeight={600}
+                        fontSize={11}
+                        name={
+                           selectedModel.displayName +
+                           " - " +
+                           selectedModel.name
+                        }
+                        defaultValue={selectedModel.object?.material?.color?.getHexString()}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                           if (selectedModel.object) {
+                              selectedModel.object.material.color =
+                                 new THREE.Color(e.target.value);
+                           }
+                        }}
+                     />
+                     <BenderText3D top="50px" position="absolute" />
+                  </Box>
+               )}
+            </Box>
+         </HStack>
+         {/* --Loading and Canvas-- */}
          <Suspense
             fallback={
                <Box textAlign="center">
-                  <Progress
-                     top={10}
-                     value={progress}
-                     rounded={5}
-                     colorScheme="pink"
-                     size="xs"
-                  />
+                  <Progress value={progress} rounded={5} colorScheme="pink" />
                   {Math.floor(progress) + "%"}
                </Box>
             }
          >
-            <Canvas camera={{ position: [0, 3, 5], fov: 60 }} shadows>
+            <Canvas
+               camera={{ position: [0, 3, 5], fov: 60 }}
+               shadows
+               onContextMenu={(e) => {
+                  if (!selectedModel.id) {
+                     posContextMenu.setPosition({ x: e.clientX, y: e.clientY });
+                  }
+               }}
+            >
                <Environment
-                  files={background}
                   background
+                  files={background}
                   ground={{ height: 10, radius: 115, scale: 90 }}
                />
                <Lights />
-               <group
-                  dispose={null}
-                  onClick={handleClickModel}
-                  onPointerMissed={handlePointerMissed}
-                  onContextMenu={handleContextMenu}
-                  castShadow
-               >
-                  {models.map((model, index) => (
-                     <Model
-                        key={index}
-                        keyMap={keyMap}
-                        primitiveRef={primitiveRefs.current[index]}
-                        path={model.path}
-                        scale={model.scale}
-                        rotate={model.rotate}
-                        position={model.position}
-                     />
-                  ))}
 
-                  <Crystals position={[-10, 0, 3]} count={4} countChild={3} />
-               </group>
+               <ModelWrapper />
+
+               <Crystals position={[-10, 0, 3]} count={4} countChild={3} />
 
                <ContactShadows
+                  name={__ContactShadows__}
                   scale={80}
-                  position={[0.13, -0.33, 0.33]}
+                  position={[0.1, 0, 0.1]}
                   opacity={1}
                />
-               <GizmoHelper alignment="bottom-right" margin={[100, 100]}>
+               <GizmoHelper
+                  name={__GizmoHelper__}
+                  alignment="bottom-right"
+                  margin={[100, 100]}
+               >
                   <GizmoViewport labelColor="white" axisHeadScale={1} />
                </GizmoHelper>
-               <Controls
-                  makeDefault
-                  maxDistance={10}
-                  minDistance={3}
-                  autoRotate={autoRotate}
-                  maxPolarAngle={Math.PI / 2.8}
-               />
+               <Controls autoRotate={autoRotate} />
             </Canvas>
          </Suspense>
+         <ContextMenu />
+         <Add3DText />
          <Leva
-            collapsed={false}
+            collapsed={!showPanelLeva}
             titleBar={{
-               position: { x: 0, y: 90 },
+               position: positionPanel,
             }}
          />
       </Box>

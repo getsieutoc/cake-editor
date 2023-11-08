@@ -1,18 +1,28 @@
+'use client';
+import dynamic from 'next/dynamic';
+import { Spinner, Box } from '@/components/chakra';
 import { Locale } from '@/types';
 import { Editor } from '@sieutoc/cake-editor';
 import { models } from './data';
-// import { getDictionary } from '@/utils/dictionary';
+const CakeEditorSSR = dynamic(() => Promise.resolve(Editor), {
+  ssr: false,
+  loading: () => (
+    <Box>
+      loading...
+      <Spinner size="xs" />
+    </Box>
+  ),
+});
+
 export default async function HomePage({
   params: { locale },
 }: {
   params: { locale: Locale };
 }) {
-  // const { page } = await getDictionary(locale);
-
   return (
     <section>
       <div>
-        <Editor
+        <CakeEditorSSR
           background="/img/christmas_photo_studio_07_1k.hdr"
           models={models}
         />

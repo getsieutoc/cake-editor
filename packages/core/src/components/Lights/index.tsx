@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { THREE } from "@/components";
 import { useControls } from "@/hooks";
-import { CONTROLS_LEVA } from "@/utils/constants";
+import { CONTROLS_LEVA, __LIGHT__ } from "@/utils/constants";
 
 export const Lights = () => {
    const directionalRef = useRef<THREE.DirectionalLight>(null!);
@@ -67,10 +67,10 @@ export const Lights = () => {
 
    return (
       <>
-         <directionalLight ref={directionalRef} castShadow>
+         <directionalLight name={__LIGHT__} ref={directionalRef} castShadow>
             {/* <Sphere args={[0.25]} rotation={[rotationDL.x, rotationDL.y, rotationDL.z]} /> */}
          </directionalLight>
-         <directionalLight ref={directionalRef2} castShadow>
+         <directionalLight name={__LIGHT__} ref={directionalRef2} castShadow>
             {/* <Sphere args={[0.25]} rotation={[rotationDL2.x, rotationDL2.y, rotationDL2.z]} /> */}
          </directionalLight>
       </>

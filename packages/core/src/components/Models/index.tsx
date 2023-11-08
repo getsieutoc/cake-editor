@@ -1,120 +1,166 @@
-import { useMemo, useState } from "react";
-import { CONTROLS_LEVA } from "@/utils/constants";
+import { useRef, useMemo, useState } from "react";
+import { THREE } from "@/components";
+import { useGLTF, useDrag } from "@/hooks";
 import {
-   Box,
-   Html,
-   THREE,
-   useGLTF,
-   useFrame,
-   useCursor,
-   useControls,
+   GroupProps,
    PrimitiveProps,
-   type ThreeEvent,
-} from "@/components";
+   THREE_MESH,
+   DreiGLTF,
+   ThreeEvent,
+   ModelType,
+} from "@/utils/types";
+import {
+   __GROUP_MODEL__,
+   __PRIMITIVE_MODEL__,
+   __SELECTED__,
+} from "@/utils/constants";
+import { useContextMenuPosition, useControlModel } from "@/globalStates";
+import { Annotation } from "./Annotation";
 
-type ModelType = {
-   primitiveRef?: { current: PrimitiveProps | null };
+type ModelTypes = GroupProps & {
    path: string;
    position?: number[];
-   rotate?: number[];
+   rotation?: number[];
    scale?: number[];
    defaultColor?: string;
-   keyMap?: { [key: string]: boolean };
+   modelDetail: ModelType;
 };
 
-export function Model(props: ModelType) {
+export function Model(props: ModelTypes) {
    const {
       path,
       position = [0, 0, 0],
       scale = [1, 1, 1],
-      primitiveRef,
-      keyMap,
+      rotation,
+      modelDetail,
+      ...rest
    } = props;
-   const { scene } = useGLTF(path);
-   const [hovered, setHovered] = useState(false);
+   const gltf = useGLTF(path) as DreiGLTF;
+   const modelRef = useRef<THREE.Group>(null);
+   const primitiveRef = useRef<PrimitiveProps>(null);
+   const { selectedModel, setModel, resetSelectedModel } = useControlModel();
+   const posContextMenu = useContextMenuPosition();
+   const [pos2d, setPos2d] = useState({ x: 0, y: 0 });
 
-   useCursor(hovered);
-   useFrame((__, delta) => {
-      if (primitiveRef && primitiveRef?.current) {
-         keyMap?.["KeyA"] && (primitiveRef.current.position.x -= 1 * delta);
-         keyMap?.["KeyD"] && (primitiveRef.current.position.x += 1 * delta);
-         keyMap?.["KeyW"] && (primitiveRef.current.position.z -= 1 * delta);
-         keyMap?.["KeyS"] && (primitiveRef.current.position.z += 1 * delta);
-      }
-   });
    const annotations = useMemo(() => {
-      const temp: JSX.Element[] = [];
-      scene?.traverse((o) => {
-         if (o?.userData?.prop) {
-            temp.push(
-               <Html
-                  key={o.uuid}
-                  position={[o.position.x, o.position.y, o.position.z]}
-                  distanceFactor={3}
-               >
-                  <Box
-                     fontSize="20px"
-                     width="max-content"
-                     maxW="500px"
-                     transform="translate3d(calc(15%), calc(-50%), 0)"
-                     textAlign="left"
-                     userSelect="none"
-                     fontFamily="var(--leva-fonts-mono)"
-                     background="black"
-                     color="white"
-                     rounded={10}
-                     paddingX={10}
-                     _before={{
-                        content: `""`,
-                        position: "absolute",
-                        top: "20px",
-                        left: "-30px",
-                        height: "1px",
-                        width: "30px",
-                        background: "black",
-                     }}
-                  >
-                     {o.userData.prop}
-                  </Box>
-               </Html>
-            );
-         }
-      });
-      return temp;
-   }, [scene]);
+      if (modelDetail.annotations?.length) {
+         const scene = gltf.scene;
+         modelDetail.annotations.forEach((ann, i) => {
+            const position = { x: 0, y: 0, z: 0 };
 
-   useControls(CONTROLS_LEVA.Colors, () => {
-      const colors = scene.children.reduce((acc, m: any) => {
-         m.castShadow = true;
-         const data = m.material
-            ? Object.assign(acc, {
-                 [m.material?.name?.toUpperCase()]: {
-                    value: "#" + m.material?.color?.getHex().toString(16),
-                    onChange: (v: string) => {
-                       m.material.color = new THREE.Color(v);
-                    },
-                 },
-              })
-            : acc;
-         return data;
-      }, {});
-      return colors;
+            scene?.children.forEach(
+               (chil: THREE.Object3D<THREE.Object3DEventMap>) => {
+                  const isObject =
+                     chil.name &&
+                     chil.name !== __PRIMITIVE_MODEL__ &&
+                     chil.name !== __GROUP_MODEL__ &&
+                     (chil.type === "Mesh" || chil.type === "Group") &&
+                     (chil.position.x || chil.position.y || chil.position.z);
+                  if (isObject) {
+                     position.x = chil.position.x;
+                     position.y = chil.position.y;
+                     position.z = chil.position.z;
+                     return;
+                  }
+               }
+            );
+            // store to scene for backup in local
+            scene.userData = {
+               ...scene.userData,
+               [`${i}`]: {
+                  id: `${i}`,
+                  idModel: modelDetail.id,
+                  content: ann,
+                  position,
+               },
+            };
+         });
+
+         const anns = scene.userData;
+
+         return Object.keys(anns)?.map((key, idx) => {
+            const annItem = anns[key];
+            if (annItem.id)
+               return (
+                  <Annotation
+                     key={idx}
+                     index={idx}
+                     annotation={annItem}
+                     scene={scene}
+                  />
+               );
+         });
+      }
+
+      return [];
+   }, [pos2d.x, pos2d.y, modelDetail.annotations]);
+
+   const handleClickModel = (e: ThreeEvent<MouseEvent>) => {
+      e.stopPropagation();
+      const obj = e.object as THREE_MESH;
+      obj.castShadow = true;
+      obj.receiveShadow = true;
+      setModel({
+         id: obj.id,
+         parentId: obj.parent?.id,
+         displayName: modelDetail.name,
+         name: obj.name,
+         object: obj,
+      });
+   };
+   const handlePointerMissed = (e: MouseEvent) => {
+      if (e.type === "dblclick") {
+         resetSelectedModel();
+      }
+   };
+   const handleContextMenu = (e: ThreeEvent<MouseEvent>) => {
+      e.stopPropagation();
+      if (selectedModel.id === e.object.id) {
+         posContextMenu.setPosition({ x: e.x, y: e.y }, modelRef.current);
+      }
+   };
+   const bind = useDrag(({ down, movement: [x, y] }) => {
+      if (down) {
+         setPos2d({ x, y });
+      }
    });
 
    return (
-      <primitive
-         ref={primitiveRef}
-         object={scene}
-         scale={scale}
-         position={position}
-         onPointerOver={(e: ThreeEvent<PointerEvent>) => {
-            e.stopPropagation();
-            setHovered(true);
-         }}
-         onPointerOut={() => setHovered(false)}
+      <group
+         ref={modelRef}
+         {...(bind() as GroupProps)}
          castShadow
+         receiveShadow
+         name={__GROUP_MODEL__}
+         onClick={handleClickModel}
+         onPointerMissed={handlePointerMissed}
+         onContextMenu={handleContextMenu}
+         onPointerOver={(e: ThreeEvent<MouseEvent>) => {
+            e.stopPropagation();
+            document.body.style.cursor = "pointer";
+         }}
+         onPointerOut={(e) => {
+            document.body.style.cursor = "default";
+         }}
+         dispose={null}
+         {...rest}
       >
-         {annotations}
-      </primitive>
+         <primitive
+            name={__PRIMITIVE_MODEL__}
+            ref={primitiveRef}
+            object={gltf.scene}
+            scale={scale}
+            rotation={rotation}
+            position={position}
+            castShadow
+            receiveShadow
+         >
+            {annotations}
+         </primitive>
+      </group>
    );
 }
+
+export { ModelWrapper } from "./ModelWrapper";
+export { Annotation } from "./Annotation";
+export { FormInputAnnotation } from "./FormInput";
