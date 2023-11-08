@@ -18,6 +18,8 @@ type ControlModelTye = {
    resetSelectedModel: () => void;
    enableOrbitControl: boolean;
    setEnableOrbitControl: (val: boolean) => void;
+   isTransform: boolean;
+   setIsTransform: (val: boolean) => void;
 };
 
 export const useControlModel = create<ControlModelTye>()((set) => ({
@@ -58,6 +60,13 @@ export const useControlModel = create<ControlModelTye>()((set) => ({
       set((state) => ({
          ...state,
          enableOrbitControl: val,
+      }));
+   },
+   isTransform: false,
+   setIsTransform: (val: boolean) => {
+      set((state) => ({
+         ...state,
+         isTransform: val,
       }));
    },
 }));

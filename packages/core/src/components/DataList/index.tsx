@@ -30,7 +30,7 @@ export const DataList = (props: DataListTypes) => {
    const handleSelect = (item: ModelType) => {
       const newItem = _.cloneDeep(item);
       newItem.isSelected = true;
-      const x = -1;
+      const x = 0;
       const y = 1.5;
       const z = 0;
       newItem.position = [x, y, z];

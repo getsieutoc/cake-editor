@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import _ from "lodash";
 import { OrbitControls, TransformControls } from "@/components";
 import { TransformControlsProps } from "@/utils/types";
 import { useControlModel } from "@/globalStates";
@@ -9,8 +10,12 @@ type ControlType = {
 };
 export function Controls(props: ControlType) {
    const { autoRotate = false } = props;
-   const { selectedModel, setTransformControlsRef, enableOrbitControl } =
-      useControlModel();
+   const {
+      selectedModel,
+      setTransformControlsRef,
+      enableOrbitControl,
+      setIsTransform,
+   } = useControlModel();
    const transformControlsRef = useRef<TransformControlsProps>(null!);
 
    useEffect(() => {
@@ -18,6 +23,11 @@ export function Controls(props: ControlType) {
          setTransformControlsRef(transformControlsRef.current);
       }
    }, [selectedModel.id]);
+
+   const debounce = _.debounce(function () {
+      setIsTransform(false);
+   }, 800);
+
    return (
       <>
          {selectedModel.id && (
@@ -27,6 +37,8 @@ export function Controls(props: ControlType) {
                object={selectedModel.object}
                mode={modes[selectedModel?.mode ?? 0]}
                size={1}
+               onMouseDown={() => setIsTransform(true)}
+               onMouseUp={() => debounce()}
             />
          )}
          <OrbitControls
