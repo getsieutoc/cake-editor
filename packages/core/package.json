@@ -43,7 +43,7 @@
     "@chakra-ui/react": "2.8.1",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
-    "@react-three/drei": "9.88.4",
+    "@react-three/drei": "9.88.17",
     "@react-three/fiber": "8.15.1",
     "@types/react-virtualized": "9.21.26",
     "@types/three": "0.157.2",
